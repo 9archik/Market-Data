@@ -1,0 +1,95 @@
+header {
+	width: 100%;
+	height: 60px;
+	-webkit-box-shadow: 0px 5px 15px 4px rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: 0px 5px 15px 4px rgba(0, 0, 0, 0.15);
+	box-shadow: 0px 5px 15px 4px rgba(0, 0, 0, 0.15);
+	font-family: 'Open Sans';
+}
+
+.container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: rgb(122, 122, 122);
+	min-height: 100%;
+}
+
+ul {
+	display: flex;
+	gap: 80px;
+}
+
+.logo {
+	font-size: 36px;
+	color: black;
+}
+
+.input {
+	position: relative;
+	height: 35px;
+}
+
+.search {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-39%);
+	left: 20px;
+}
+
+input {
+	width: 320px;
+	height: 100%;
+	border-radius: 8px;
+	padding: 0 10px 0px 45px;
+	border: 1px solid rgb(241, 240, 240);
+	outline: 0;
+	font-family: 'Open Sans';
+}
+
+.link {
+	position: relative;
+	cursor: pointer;
+}
+
+.link::after {
+	position: absolute;
+	content: '';
+	bottom: -5px;
+	width: 100%;
+	background-color: rgb(150, 150, 150);
+	left: 0;
+	height: 1px;
+	opacity: 0;
+	transition: 0.5s;
+}
+
+.link:hover::after {
+	opacity: 1;
+}
+
+.toolList {
+	position: absolute;
+	top: 49px;
+	width: 100%;
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	-webkit-box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.2);
+	box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.2);
+    max-height:200px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    z-index: 99;
+}
+
+.toolList li
+{
+    @apply text-2xl text-black w-full font-bold hover:bg-gray-300 cursor-pointer;
+    padding: 15px 5px;
+}

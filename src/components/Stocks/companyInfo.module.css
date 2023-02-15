@@ -1,0 +1,19 @@
+.container
+{
+    @apply flex flex-col w-full pt-6;
+}
+
+.info
+{
+    @apply font-bold text-black
+}
+
+.symb
+{
+   @apply mb-6 text-5xl
+}
+
+.mainStaticBlock
+{
+    @apply flex flex-row gap-6 items-center text-2xl
+}
