@@ -1,6 +1,7 @@
-
 import mouseReducer from './reducers/mouseSlice';
-import searchValueReducer from './reducers/searchValueSlice';
+import inputDebounceValueReducer from './reducers/inputDebounceValueSlice';
+import toolListReducer from './reducers/toolListSlice';
+import searchQueryValueReducer from './reducers/searchQueryValueSlice';
 import { combineReducers } from '@reduxjs/toolkit';
 import { configureStore } from '@reduxjs/toolkit';
 import { getDefaultMiddleware } from '@reduxjs/toolkit';
@@ -11,7 +12,9 @@ const rootReducer = combineReducers({
 	mouseReducer,
 	[stockToolsApi.reducerPath]: stockToolsApi.reducer,
 	[stockDataApi.reducerPath]: stockDataApi.reducer,
-    searchValueReducer,
+	inputDebounceValueReducer,
+	searchQueryValueReducer,
+	toolListReducer
 });
 
 export const setupStore = () => {

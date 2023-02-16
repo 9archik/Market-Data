@@ -1,24 +1,36 @@
-import styles from '../style.module.css';
+import styles from './style.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine, faSearch } from '@fortawesome/free-solid-svg-icons';
-import ToolInput from '../Tool/ToolInput';
+import ToolInput from '../ToolInput/ToolInput';
 import useDebounce from '../../../hooks/useDebounce';
 import { useEffect } from 'react';
 import { stockToolsApi } from '../../../redux/store/reducers/API/stocksTools.api';
 import { useDispatch } from 'react-redux';
-import { setInputValue } from '../../../redux/store/reducers/searchValueSlice';
-const Input: React.FC = () => {
-	const [debounceSearchValue, searchValue, setSearchValue] = useDebounce('', 2000);
+import { setInputDebounceValue } from '../../../redux/store/reducers/inputDebounceValueSlice';
+import { setSearchQueryValue } from '../../../redux/store/reducers/searchQueryValueSlice';
 
-	const dispatch = useDispatch();
+import { useAppDispatch } from '../../../hooks/redux';
+import { setToolList } from '../../../redux/store/reducers/toolListSlice';
+import { IStockToolsList } from '../../../models/IStockTools';
+
+const Input: React.FC = () => {
+	const [debounceSearchValue, inputValue, setInputValue] = useDebounce('', 2000);
+
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		dispatch(setInputValue(debounceSearchValue));
+		dispatch(setInputDebounceValue(debounceSearchValue));
 	}, [debounceSearchValue]);
+
+	const onClickSearch = () => {
+		dispatch(setSearchQueryValue(inputValue));
+		dispatch(setToolList(null));
+		setInputValue('');
+	};
 
 	return (
 		<div className={styles.input}>
-			<button>
+			<button onClick={() => onClickSearch()}>
 				<FontAwesomeIcon
 					className={styles.search}
 					icon={faSearch}
@@ -26,13 +38,19 @@ const Input: React.FC = () => {
 			</button>
 
 			<input
-				value={searchValue}
-				onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
+				value={inputValue}
+				onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
 				type="text"
 				placeholder="enter text for search company"
+				onKeyDown={(event: React.KeyboardEvent<HTMLElement>) => {
+					if(event.key === "Enter")
+					{
+                         onClickSearch();
+					}
+				}}
 			/>
 
-			<ToolInput />
+			<ToolInput setInputValue={setInputValue} />
 		</div>
 	);
 };

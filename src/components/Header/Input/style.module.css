@@ -1,0 +1,43 @@
+.input {
+	position: relative;
+	height: 35px;
+}
+
+.search {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-39%);
+	left: 20px;
+}
+
+input {
+	width: 320px;
+	height: 100%;
+	border-radius: 8px;
+	padding: 0 10px 0px 45px;
+	border: 1px solid rgb(160, 160, 160);
+	outline: 0;
+	font-family: 'Open Sans';
+	background-color: transparent;
+}
+
+.link {
+	position: relative;
+	cursor: pointer;
+}
+
+.link::after {
+	position: absolute;
+	content: '';
+	bottom: -5px;
+	width: 100%;
+	background-color: rgb(150, 150, 150);
+	left: 0;
+	height: 1px;
+	opacity: 0;
+	transition: 0.5s;
+}
+
+.link:hover::after {
+	opacity: 1;
+}

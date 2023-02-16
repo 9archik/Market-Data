@@ -2,13 +2,13 @@ import { CSSProperties } from "react";
 
 export const styleName: CSSProperties = {
 	fontFamily: 'Open Sans',
-	fontSize: 24,
+	fontSize: 12,
 	marginRight: '4px',
 };
 
 export const styleValue: CSSProperties = {
 	fontFamily: 'Open Sans',
-	fontSize: 26,
+	fontSize: 14,
 	fontWeight: 700,
 };
 
@@ -17,7 +17,7 @@ export const styleContainer: CSSProperties = {
 	height: '100%',
 	display: 'flex',
 	flexDirection: 'column',
-	gap: 10,
+	gap: 5,
 	alignItems: 'center',
 	justifyContent: 'center',
 };
@@ -27,4 +27,7 @@ export const styleForeignObject: CSSProperties = {
 	border: '1px solid #9C9C9C',
 	gap: 10,
 	alignItems: 'center',
+	height:100,
+	width:80,
+
 };

@@ -1,9 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IStockData } from '../../../../models/IStockData';
 
-
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IStockToolsQuoteList } from '../../../../models/IStockToolsQuote';
+import { IStockToolsList } from '../../../../models/IStockTools';
 
 // Define a service using a base URL and expected endpoints
 export const stockToolsApi = createApi({
@@ -17,7 +16,7 @@ export const stockToolsApi = createApi({
 		method: 'GET',
 	}),
 	endpoints: (builder) => ({
-		getStockTools: builder.query<IStockToolsQuoteList, string>({
+		getStockTools: builder.query<IStockToolsList, string>({
 			query: (keyword: string) => ({
 				url: `query?keywords=${keyword}&function=SYMBOL_SEARCH&datatype=json`,
 			}),
@@ -25,10 +24,6 @@ export const stockToolsApi = createApi({
 	}),
 });
 
-
-
 // Export hooks for usage in function components, which are
 // auto-generated based on the defined endpoints
 export const { useGetStockToolsQuery } = stockToolsApi;
-
-

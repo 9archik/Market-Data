@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IStockData } from '../../../../models/IStockData';
-import { IStockToolsQuote } from '../../../../models/IStockToolsQuote';
+import { IStockQuote } from '../../../../models/IStockQuote';
 import { IQueryDataParams } from './IQueryDataParams';
 
 export const stockDataApi = createApi({
@@ -17,7 +17,7 @@ export const stockDataApi = createApi({
 				url: `query?function=${params.function}&symbol=${params.symbol}&outputsize=${params.outputSize}&apikey=${params.apiKey}`,
 			}),
 		}),
-		getStockQuoteData: builder.query<IStockToolsQuote, IQueryDataParams>({
+		getStockQuoteData: builder.query<IStockQuote, IQueryDataParams>({
 			query: (params: IQueryDataParams) => ({
 				url: `query?function=GLOBAL_QUOTE&symbol=${params.symbol}&outputsize=${params.outputSize}&apikey=${params.apiKey}`,
 			}),

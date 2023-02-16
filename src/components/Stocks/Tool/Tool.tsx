@@ -1,4 +1,4 @@
-import styles from './style.module.css';
+import styles from '../style.module.css';
 import { CSSProperties, HTMLAttributes, SVGAttributes, useState } from 'react';
 import { CandleProps, Flyout } from 'victory';
 import {
@@ -6,8 +6,8 @@ import {
 	styleForeignObject,
 	styleName,
 	styleValue,
-} from '../../styles/victory/toolVictory';
-import { IPropType, IToolValues } from './interfaces';
+} from '../../../styles/victory/toolVictory';
+import { IPropType, IToolValues } from '../interfaces';
 
 const Tool = ({ xC, yC, datum }: IPropType) => {
 	const [arrayValues] = useState<IToolValues[]>([
@@ -19,11 +19,11 @@ const Tool = ({ xC, yC, datum }: IPropType) => {
 
 	return (
 		<g>
-			<foreignObject x={xC} y={yC} style={styleForeignObject} width={150} height={200}>
-				<div style={styleContainer}>
+			<foreignObject x={xC} y={yC} style={styleForeignObject}>
+				<div className={styles.containerTool} style={styleContainer}>
 					{arrayValues.map((el) => {
 						return (
-							<div>
+							<div className={styles.toolListItem}>
 								<span style={styleName}>{el.name} </span>{' '}
 								<span style={styleValue} className={styles.value}>
 									{el.value}

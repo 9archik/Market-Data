@@ -1,33 +1,6 @@
 ul {
 	display: flex;
-	gap: 80px;
-}
-
-.logo {
-	font-size: 36px;
-	color: black;
-}
-
-.input {
-	position: relative;
-	height: 35px;
-}
-
-.search {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-39%);
-	left: 20px;
-}
-
-input {
-	width: 320px;
-	height: 100%;
-	border-radius: 8px;
-	padding: 0 10px 0px 45px;
-	border: 1px solid rgb(241, 240, 240);
-	outline: 0;
-	font-family: 'Open Sans';
+	gap: 60px;
 }
 
 .link {

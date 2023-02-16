@@ -2,7 +2,7 @@ import { VictoryCandlestickStyleInterface } from 'victory';
 import { StyleAxis } from '../../components/Stocks/interfaces';
 
 export const styleCandle: VictoryCandlestickStyleInterface = {
-	data: { stroke: '#30303056', strokeWidth: 1 },
+	data: { stroke: "#00000050", strokeWidth: 2 },
 };
 
 export const styleAxis: StyleAxis = {
@@ -10,12 +10,12 @@ export const styleAxis: StyleAxis = {
 		size: 3,
 	},
 	tickLabels: {
-		fontSize: 18,
+		fontSize: 14,
 		fontFamily: 'Open Sans',
 		fontWeight: 700,
 	},
 	grid: {
-		stroke: 'lightgrey',
+		stroke: '#ffffff70',
 		strokeDasharray: '0',
 	},
 };

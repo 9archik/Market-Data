@@ -1,0 +1,27 @@
+.toolList {
+	position: absolute;
+	top: 49px;
+	width: 100%;
+	-webkit-border-bottom-right-radius: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+	-moz-border-radius-bottomright: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	-webkit-box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.2);
+	box-shadow: 0px 5px 16px 0px rgba(0, 0, 0, 0.2);
+    max-height:200px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(234, 234, 234);
+    z-index: 99;
+    gap:0px;
+    overflow-y: auto;
+}
+
+.toolList li
+{
+    @apply text-2xl text-black w-full font-bold hover:bg-gray-300 cursor-pointer;
+    padding: 15px 5px;
+}
