@@ -19,7 +19,9 @@ export const styleContainer: CSSProperties = {
 	flexDirection: 'column',
 	gap: 5,
 	alignItems: 'center',
-	justifyContent: 'center',
+	justifyContent: 'space-around',
+	paddingTop: 10,
+	paddingBottom: 10,
 };
 
 export const styleForeignObject: CSSProperties = {
@@ -27,7 +29,5 @@ export const styleForeignObject: CSSProperties = {
 	border: '1px solid #9C9C9C',
 	gap: 10,
 	alignItems: 'center',
-	height:100,
-	width:80,
 
 };

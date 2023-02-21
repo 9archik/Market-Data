@@ -28,14 +28,18 @@ import CompanyInfo from './MainCompanyInfo/MainCompanyInfo';
 import { styleAxis, styleCandle } from '../../styles/victory/stylesVictory';
 import { months } from '../../constants/stocks';
 import Chart from './Chart/Chart';
+import Checkboxs from './Checkboxs/Checkboxs';
 
 
 
 const Stocks = React.memo(() => {
+	const searchValue = useAppSelector((state) => state.searchQueryValueReducer);
+
 	return (
 		<section className="stocks container mt-3">
 			<CompanyInfo />
-			<Chart />
+			<Checkboxs />
+			{ <Chart />}
 		</section>
 	);
 });

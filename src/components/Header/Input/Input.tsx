@@ -14,7 +14,7 @@ import { setToolList } from '../../../redux/store/reducers/toolListSlice';
 import { IStockToolsList } from '../../../models/IStockTools';
 
 const Input: React.FC = () => {
-	const [debounceSearchValue, inputValue, setInputValue] = useDebounce('', 2000);
+	const [debounceSearchValue, inputValue, setInputValue] = useDebounce('', 1000);
 
 	const dispatch = useAppDispatch();
 

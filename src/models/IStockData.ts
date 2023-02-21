@@ -8,5 +8,5 @@ export interface IStockDataIndex {
 
 export interface IStockData
 {
-   [key: string]: IStockDataIndex,
+   [key: string]: IStockDataIndex
 } 

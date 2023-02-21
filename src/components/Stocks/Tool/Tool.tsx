@@ -9,17 +9,17 @@ import {
 } from '../../../styles/victory/toolVictory';
 import { IPropType, IToolValues } from '../interfaces';
 
-const Tool = ({ xC, yC, datum }: IPropType) => {
+const Tool = ({xC, yC, datum }: IPropType) => {
 	const [arrayValues] = useState<IToolValues[]>([
-		{ name: 'open', value: datum.open },
-		{ name: 'close', value: datum.close },
-		{ name: 'high', value: datum.high },
-		{ name: 'low', value: datum.low },
+		{ name: 'open', value: Math.round(datum.open*100)/100 },
+		{ name: 'close', value: Math.round(datum.close*100)/100 },
+		{ name: 'high', value: Math.round(datum.high*100)/100 },
+		{ name: 'low', value: Math.round(datum.low*100)/100 },
 	]);
 
 	return (
 		<g>
-			<foreignObject x={xC} y={yC} style={styleForeignObject}>
+			<foreignObject width={100} height={140} x={xC} y={yC} style={styleForeignObject}>
 				<div className={styles.containerTool} style={styleContainer}>
 					{arrayValues.map((el) => {
 						return (

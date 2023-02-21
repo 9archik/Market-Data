@@ -66,4 +66,13 @@ export interface IToolValues {
 	value: number;
 };
 
+export interface ICandlestick
+{
+    open: number,
+	high: number,
+	low: number,
+	close: number,
+	x: Date,
+}
+
 
