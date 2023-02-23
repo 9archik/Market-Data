@@ -33,7 +33,7 @@ import Checkboxs from './Checkboxs/Checkboxs';
 
 
 const Stocks = React.memo(() => {
-	const searchValue = useAppSelector((state) => state.searchQueryValueReducer);
+	// const searchValue = useAppSelector((state) => state.searchQueryValueReducer);
 
 	return (
 		<section className="stocks container mt-3">

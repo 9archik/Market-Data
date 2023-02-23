@@ -8,6 +8,7 @@ import { negColor, posColor } from '../../../constants/CompanyInfo';
 import style from './MainCompanyInfo.module.css';
 import { useAppSelector } from '../../../hooks/redux';
 import { createContainer } from 'victory';
+import { useParams } from 'react-router-dom';
 
 interface IStockMainInfo {
 	symbol: string;
@@ -18,11 +19,11 @@ interface IStockMainInfo {
 
 const MainCompanyInfo: React.FC = React.memo(() => {
 	const searchValue = useAppSelector((state) => state.searchQueryValueReducer);
-
+    const {name} = useParams()
     const VictoryContainer = createContainer('zoom', 'cursor');
 
 	const [queryParams, setQueryParams] = useState<IQueryDataParams>({
-		symbol: searchValue,
+		symbol: name,
 		outputSize: 'compact',
 		apiKey: 'UYWA0OMDMCKUSCJ3',
 	});
@@ -41,11 +42,12 @@ const MainCompanyInfo: React.FC = React.memo(() => {
 
 	useEffect(() => {
 		setQueryParams({
-			symbol: searchValue,
+			symbol: name,
 			outputSize: 'compact',
 			apiKey: 'UYWA0OMDMCKUSCJ3',
 		});
-	}, [searchValue]);
+	}, [name]);
+
 
 	useEffect(() => {
 		if (mainData && mainData['Global Quote'] && !mainDataLoading) {

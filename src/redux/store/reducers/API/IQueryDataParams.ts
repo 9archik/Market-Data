@@ -5,7 +5,7 @@ export interface IQueryDataParams {
 		| 'TIME_SERIES_WEEKLY'
 		| 'TIME_SERIES_MONTHLY'
 		| 'GLOBAL_QUOTE';
-	symbol: string;
+	symbol: string | undefined;
 	outputSize: 'compact' | 'full';
 	apiKey:
 		| 'W7QFK4TPN9B30U06'

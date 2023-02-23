@@ -12,11 +12,14 @@ import { setSearchQueryValue } from '../../../redux/store/reducers/searchQueryVa
 import { useAppDispatch } from '../../../hooks/redux';
 import { setToolList } from '../../../redux/store/reducers/toolListSlice';
 import { IStockToolsList } from '../../../models/IStockTools';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Input: React.FC = () => {
 	const [debounceSearchValue, inputValue, setInputValue] = useDebounce('', 1000);
 
 	const dispatch = useAppDispatch();
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		dispatch(setInputDebounceValue(debounceSearchValue));
@@ -30,12 +33,12 @@ const Input: React.FC = () => {
 
 	return (
 		<div className={styles.input}>
-			<button onClick={() => onClickSearch()}>
+			<Link to={`/stocks/${inputValue}`} onClick={onClickSearch}>
 				<FontAwesomeIcon
 					className={styles.search}
 					icon={faSearch}
 					aria-hidden="true"></FontAwesomeIcon>
-			</button>
+			</Link>
 
 			<input
 				value={inputValue}
@@ -43,9 +46,9 @@ const Input: React.FC = () => {
 				type="text"
 				placeholder="enter text for search company"
 				onKeyDown={(event: React.KeyboardEvent<HTMLElement>) => {
-					if(event.key === "Enter")
-					{
-                         onClickSearch();
+					if (event.key === 'Enter') {
+						onClickSearch();
+						navigate(`/stocks/${inputValue}`);
 					}
 				}}
 			/>

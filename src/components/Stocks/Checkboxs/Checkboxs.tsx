@@ -1,6 +1,7 @@
 import styles from './style.module.css';
 import candleStickSvg from '../../../images/candleStick.svg';
 import lineChartSvg from '../../../images/lineChart.svg';
+import { useState } from 'react';
 export interface IChartType {
 	src: string;
 	value: string;
@@ -26,13 +27,50 @@ const intervalTypeList: IIntervalType[] = [
 	{ value: '1W', checked: false },
 ];
 const Checkboxs = () => {
+	const [type, setType] = useState<IChartType[]>(chartTypeList);
+
+	const [interval, setInterval] = useState<IIntervalType[]>(intervalTypeList);
+
+	console.log(interval);
+
+	const handleType = (arr: IChartType[], index: number) => {
+		let copy = [...arr];
+		if (copy) {
+			copy.map((el, i: number) => {
+				if (index === i) {
+					el.checked = true;
+				} else {
+					el.checked = false;
+				}
+			});
+			setType(copy);
+		}
+	};
+
+	const handleInterval = (arr: IIntervalType[], index: number) => {
+		let copy = [...arr];
+		if (copy) {
+			copy.map((el, i: number) => {
+				if (index === i) {
+					el.checked = true;
+				} else {
+					el.checked = false;
+				}
+			});
+			setInterval(copy);
+		}
+	};
+
 	return (
 		<div className={styles.container}>
 			<form className={styles.form}>
 				<div className={styles.typeChartContainer}>
-					{chartTypeList.map((el: IChartType) => {
+					{chartTypeList.map((el: IChartType, index: number) => {
 						return (
-							<label className={styles.typeChart} id="typeChart">
+							<label
+								onClick={() => handleType(type, index)}
+								className={styles.typeChart}
+								id="typeChart">
 								<input
 									className={styles.checkbox}
 									value={el.value}
@@ -48,9 +86,12 @@ const Checkboxs = () => {
 					})}
 				</div>
 				<div className={styles.intervalContainer}>
-					{intervalTypeList.map((el: IIntervalType) => {
+					{intervalTypeList.map((el: IIntervalType, index: number) => {
 						return (
-							<label className={styles.interval} id="interval">
+							<label
+								onClick={() => handleInterval(interval, index)}
+								className={styles.interval}
+								id="interval">
 								<input
 									className={styles.checkbox}
 									type="radio"

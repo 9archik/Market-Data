@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { IStockTools, IStockToolsList } from '../../../models/IStockTools';
 import { stockToolsApi } from '../../../redux/store/reducers/API/stocksTools.api';
@@ -7,10 +8,10 @@ import { setToolList } from '../../../redux/store/reducers/toolListSlice';
 import styles from './style.module.css';
 
 export type PropTool = {
-	setInputValue: React.Dispatch<string>
+	setInputValue: React.Dispatch<string>;
 };
 
-const ToolInput: React.FC<PropTool> = React.memo(({setInputValue}) => {
+const ToolInput: React.FC<PropTool> = React.memo(({ setInputValue }) => {
 	const searchValue = useAppSelector((state) => state.inputDebounceValueReducer);
 
 	const { data, isLoading, isError } = stockToolsApi.useGetStockToolsQuery(searchValue);
@@ -20,9 +21,10 @@ const ToolInput: React.FC<PropTool> = React.memo(({setInputValue}) => {
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-       dispatch(setToolList(data));        
-	},  [data])
-    
+		dispatch(setToolList(data));
+	}, [data]);
+
+	
 	if (isLoading) {
 		return <></>;
 	}
@@ -36,7 +38,8 @@ const ToolInput: React.FC<PropTool> = React.memo(({setInputValue}) => {
 			<ul className={styles.toolList}>
 				{list.map((el: string, index: number) => {
 					return (
-						<li
+						<Link
+							to={`/stocks/${el}`}
 							onClick={() => {
 								let str: string = el as string;
 								dispatch(setSearchQueryValue(str));
@@ -44,7 +47,7 @@ const ToolInput: React.FC<PropTool> = React.memo(({setInputValue}) => {
 								dispatch(setToolList(null));
 							}}>
 							{<>{el}</>}
-						</li>
+						</Link>
 					);
 				})}
 			</ul>
