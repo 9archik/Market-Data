@@ -29,17 +29,17 @@ import { styleAxis, styleCandle } from '../../styles/victory/stylesVictory';
 import { months } from '../../constants/stocks';
 import Chart from './Chart/Chart';
 import Checkboxs from './Checkboxs/Checkboxs';
-
-
+import DetailedInfo from './DetailedInfo/DetailedInfo';
+import NewsList from './NewsList/NewsList';
 
 const Stocks = React.memo(() => {
-	// const searchValue = useAppSelector((state) => state.searchQueryValueReducer);
-
 	return (
 		<section className="stocks container mt-3">
 			<CompanyInfo />
 			<Checkboxs />
-			{ <Chart />}
+			<Chart />
+			<DetailedInfo />
+			<NewsList/>
 		</section>
 	);
 });

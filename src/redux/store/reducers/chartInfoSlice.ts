@@ -9,8 +9,8 @@ export interface ICandlestickInfo {
 }
 
 export interface ILineInfo {
-	value: number;
-	x:  Date;
+	y: number;
+	x: number;
 }
 
 export interface IChartInfo {
@@ -29,14 +29,24 @@ const initialState: IChartInfo = {
 	interval: 'Daily',
 };
 
+
+
 const chartInfoSlice = createSlice({
 	name: 'chartInfo',
 	initialState,
 	reducers: {
 		setChartInfo(state: IChartInfo, action: PayloadAction<any>) {
 			if (state.type === 'candlestick') {
-				if (action.payload && action.payload[`Time Series (${state.interval})`]) {
-					let arrData = action.payload['Time Series (Daily)'];
+			
+				if (
+					action.payload &&
+					(action.payload[`Time Series (${state.interval})`] ||
+						action.payload[`${state.interval} Time Series`])
+				) {
+					let arrData =
+						state.interval !== 'Weekly' && state.interval !== 'Monthly'
+							? action.payload[`Time Series (${state.interval})`]
+							: action.payload[`${state.interval} Time Series`];
 					let arr: ICandlestickInfo[] = [];
 
 					let highArr: number[] = [];
@@ -59,8 +69,10 @@ const chartInfoSlice = createSlice({
 						let year: number = date.getFullYear();
 						let day: number = date.getDate();
 						let month: number = date.getMonth();
+						let hour: number = date.getHours();
+						let minutes: number = date.getMinutes();
 
-						value.x = new Date(year, month, day);
+						value.x = new Date(year, month, day, hour, minutes);
 
 						arr.push(value);
 
@@ -73,10 +85,19 @@ const chartInfoSlice = createSlice({
 					state.data = arr;
 					state.maxDomain = highArr[highArr.length - 1];
 					state.minDomain = lowArr[0];
+                   
+					console.log('state', arrData);
 				}
 			} else {
-				if (action.payload && action.payload[`Time Series (${state.interval})`]) {
-					let arrData = action.payload['Time Series (Daily)'];
+				if (
+					action.payload &&
+					(action.payload[`Time Series (${state.interval})`] ||
+						action.payload[`${state.interval} Time Series`])
+				) {
+					let arrData =
+						state.interval !== 'Weekly' && state.interval !== 'Monthly'
+							? action.payload[`Time Series (${state.interval})`]
+							: action.payload[`${state.interval} Time Series`];
 					let arr: ILineInfo[] = [];
 
 					let highArr: number[] = [];
@@ -85,17 +106,14 @@ const chartInfoSlice = createSlice({
 
 					for (const key in arrData) {
 						let value: ILineInfo = {
-							value: 0,
-							x: new Date(2020, 1),
+							y: 0,
+							x: 0,
 						};
 
-						value.value = arrData[key]['4. close'];
+						value.y = Number(arrData[key]['4. close']);
 						let date: Date = new Date(key);
-						let year: number = date.getFullYear();
-						let day: number = date.getDate();
-						let month: number = date.getMonth();
 
-						value.x = new Date(year, month, day);
+						value.x = date.getTime();
 
 						arr.push(value);
 
@@ -114,12 +132,11 @@ const chartInfoSlice = createSlice({
 		setType(state: IChartInfo, action: PayloadAction<'candlestick' | 'line'>) {
 			state.type = action.payload;
 		},
-        setInterval(state: IChartInfo, action: PayloadAction<string>)
-        {
-            state.interval= action.payload
-        }
+		setIntervalSlice(state: IChartInfo, action: PayloadAction<string>) {
+			state.interval = action.payload;
+		},
 	},
 });
 
 export default chartInfoSlice.reducer;
-export const {setChartInfo, setType, setInterval} = chartInfoSlice.actions;
+export const { setChartInfo, setType, setIntervalSlice } = chartInfoSlice.actions;

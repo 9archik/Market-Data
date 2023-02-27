@@ -5,12 +5,12 @@
 
 .info
 {
-    @apply font-bold text-black
+    @apply font-bold text-black gap-3 flex flex-col
 }
 
 .symb
 {
-   @apply mb-6 text-4xl
+   @apply text-4xl
 }
 
 .mainStaticBlock

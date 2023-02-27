@@ -17,7 +17,6 @@ import { calculateXY, Mouse } from '../../../redux/store/reducers/mouseSlice';
 import { styleAxis, styleCandle } from '../../../styles/victory/stylesVictory';
 import { IQueryDataParams } from '../../../redux/store/reducers/API/IQueryDataParams';
 import Tool from '../Tool/Tool';
-// import { ICandlestick } from '../interfaces';
 import { VictoryCursorContainer } from 'victory';
 import { batch } from 'react-redux';
 import Checkboxs from '../Checkboxs/Checkboxs';
@@ -27,45 +26,42 @@ import { chartSize } from './../../../redux/store/reducers/chartSizeSlice';
 import { setChartInfo } from '../../../redux/store/reducers/chartInfoSlice';
 import { debounce } from 'ts-debounce';
 import { useParams } from 'react-router-dom';
+import { marketInfoApi } from './../../../redux/store/reducers/API/marketInfo.api';
+import { setStockQueryParamsName } from '../../../redux/store/reducers/stockQueryParamsSlice';
 
 const Chart = () => {
 	const contRef = useRef<HTMLDivElement>(null!);
 
 	const { name } = useParams();
 
-	const mouseCoordinate = useAppSelector((state) => state.mouseReducer);
+	const queryParams = useAppSelector((state) => state.stockQueryParamsReducer);
+
+	const { data, isFetching, isError } = queryParams.interval
+		? stockDataApi.useGetStockIntraDayDataQuery(queryParams)
+		: stockDataApi.useGetStockDataQuery(queryParams);
+
+	const { interval: intervalState } = useAppSelector((state) => state.chartInfoReducer);
 
 	const chartSizeState = useAppSelector((state) => state.chartSizeReducer);
 
 	const { data: chartInfo } = useAppSelector((state) => state.chartInfoReducer);
 
-	const [queryParams, setQueryParams] = useState<IQueryDataParams>({
-		function: 'TIME_SERIES_DAILY_ADJUSTED',
-		symbol: name,
-		outputSize: 'compact',
-		apiKey: '88WOO3GUK7BE4DU3',
-	});
+	const { type } = useAppSelector((state) => state.chartInfoReducer);
+
 	const dispatch = useAppDispatch();
 	function resize(e: Event) {
 		if (contRef && contRef.current) {
 			let chSize: chartSize = {
-				width: contRef.current.offsetHeight,
-				height: contRef.current.offsetWidth,
+				height: contRef.current.offsetHeight,
+				width: contRef.current.offsetWidth,
 			};
 			dispatch(setChartSize(chSize));
 			contRef.current.children[0].children[0].children[0].attributes[3].nodeValue = '0 0 1480 720';
 		}
 	}
 
-	const { data, isLoading, isError } = stockDataApi.useGetStockDataQuery(queryParams);
-
 	useEffect(() => {
-		setQueryParams({
-			function: 'TIME_SERIES_DAILY_ADJUSTED',
-			symbol: name,
-			outputSize: 'compact',
-			apiKey: '88WOO3GUK7BE4DU3',
-		});
+		dispatch(setStockQueryParamsName(name));
 	}, [name]);
 
 	useEffect(() => {
@@ -78,15 +74,41 @@ const Chart = () => {
 
 	useEffect(() => {
 		dispatch(setChartInfo(data));
-	}, [data]);
+	}, [data, queryParams, intervalState, type]);
 
-	if (chartInfo && chartInfo.length === 0) {
-		return <></>;
-	}
+	const mouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		let x = e.pageX,
+			y = e.pageY;
+
+		dispatch(calculateXY({ x: x - contRef.current.offsetLeft, y: y - contRef.current.offsetTop }));
+	};
+
+	// if (isFetching) {
+	// 	return (
+	// 		<div
+	// 			style={{
+	// 				width: 1440,
+	// 				height: 720,
+	// 			}}>
+	// 			Загрузка
+	// 		</div>
+	// 	);
+	// }
+
+	// if (chartInfo && chartInfo.length === 0) {
+	// 	return (
+	// 		<div
+	// 			style={{
+	// 				width: 1440,
+	// 				height: 720,
+	// 			}}></div>
+	// 	);
+	// }
 
 	return (
 		<>
 			<div
+				onMouseMove={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => mouseMove(event)}
 				ref={contRef}
 				style={{
 					display: 'flex',
@@ -99,7 +121,7 @@ const Chart = () => {
 						maxWidth: 1440,
 						maxHeight: 720,
 					}}>
-					<CandleStick ref={contRef} />
+					{<CandleStick />}
 				</div>
 			</div>
 		</>

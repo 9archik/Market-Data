@@ -42,7 +42,6 @@ const ToolInput: React.FC<PropTool> = React.memo(({ setInputValue }) => {
 							to={`/stocks/${el}`}
 							onClick={() => {
 								let str: string = el as string;
-								dispatch(setSearchQueryValue(str));
 								setInputValue('');
 								dispatch(setToolList(null));
 							}}>

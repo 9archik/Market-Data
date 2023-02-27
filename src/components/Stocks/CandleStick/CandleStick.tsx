@@ -6,10 +6,19 @@ import {
 	VictoryAxis,
 	VictoryCandlestick,
 	VictoryChart,
+	VictoryGroup,
 	VictoryLabel,
+	VictoryLine,
+	VictoryScatter,
 	VictoryTheme,
 	VictoryTooltip,
+	VictoryVoronoiContainer,
 	VictoryZoomContainer,
+	VictoryZoomContainerProps,
+	VictoryVoronoiContainerProps,
+	VictoryCursorContainer,
+	VictoryArea,
+	Candle,
 } from 'victory';
 import { months } from '../../../constants/stocks';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
@@ -22,62 +31,66 @@ import { calculateXY, Mouse } from '../../../redux/store/reducers/mouseSlice';
 import { styleAxis, styleCandle } from '../../../styles/victory/stylesVictory';
 
 import Tool from '../Tool/Tool';
+import { createContainer } from 'victory';
+import VictoryCursorChart from '../VictoryCursorChart/VictoryCursorChart';
 
-const CandleStick = forwardRef((ref: any) => {
-	
-	const mouseCoordinate = useAppSelector((state) => state.mouseReducer);
+const VictoryZoomVoronoiContainer = createContainer<
+	VictoryZoomContainerProps,
+	VictoryVoronoiContainerProps
+>('zoom', 'voronoi');
 
+const CandleStick = () => {
 	const chartSizeState = useAppSelector((state) => state.chartSizeReducer);
 
 	const [zoom, setZoom] = useState<number>(1305241712);
 
 	const { data: chartInfo } = useAppSelector((state) => state.chartInfoReducer);
- 
 
 	const { maxDomain } = useAppSelector((state) => state.chartInfoReducer);
 
 	const { minDomain } = useAppSelector((state) => state.chartInfoReducer);
 
+	const { type } = useAppSelector((state) => state.chartInfoReducer);
+
 	const dispatch = useAppDispatch();
 
-
 	const handleZoomChange = (domain: DomainTuple) => {
-		let startDate: Date = domain[0] as Date;
-		let endDate: Date = domain[1] as Date;
-
-		setZoom(() => endDate.getTime() - startDate.getTime());
+		let startDate: any = domain[0];
+		let endDate: any = domain[1];
+		if (type === 'candlestick') {
+			setZoom(() => endDate.getTime() - startDate.getTime());
+		} else {
+			setZoom(() => endDate - startDate);
+		}
 	};
 
 	const tickFormatInit = (t: any): string => {
-		if (zoom > 305241712)
-			return `${t.getDate() as string} ${months[t.getMonth()]} ${t.getFullYear()}`;
-		else return `${t.getDate()} ${months[t.getMonth()]} ${t.getFullYear()} ${t.getHours()}:00`;
-	};
-    
-	useEffect(() => {
-		if (ref && ref.current) {
-			let chSize: chartSize = {
-				width: ref.current.offsetHeight,
-				height: ref.current.offsetWidth,
-			};
-			dispatch(setChartSize(chSize));
-			ref.current.children[0].children[0].children[0].attributes[3].nodeValue = '0 0 1480 720';
+		if (type === 'candlestick') {
+			if (zoom > 305241712)
+				return `${t.getDate() as string} ${months[t.getMonth()]} ${t.getFullYear()}`;
+			else return `${t.getDate()} ${months[t.getMonth()]} ${t.getFullYear()} ${t.getHours()}:00`;
 		} else {
-			dispatch(setChartSize({ width: window.innerWidth, height: window.innerHeight }));
+			let date: Date = new Date(t.x);
+			if (zoom > 305241712)
+				return `${t.getDate() as string} ${months[t.getMonth()]} ${t.getFullYear()}`;
+			else return `${t.getDate()} ${months[t.getMonth()]} ${t.getFullYear()} ${t.getHours()}:00`;
 		}
-	}, [ chartSizeState, chartInfo]);
+	};
 
 	return (
 		<VictoryChart
 			containerComponent={
-				<VictoryZoomContainer onZoomDomainChange={(domain, props) => handleZoomChange(domain.x)} />
+				<VictoryZoomVoronoiContainer
+					onZoomDomainChange={(domain, props) => handleZoomChange(domain.x)}
+					voronoiDimension="x"
+				/>
 			}
 			minDomain={{ y: minDomain }}
 			maxDomain={{ y: maxDomain }}
 			height={720}
 			theme={VictoryTheme.material}
 			width={1440}
-			domainPadding={{ x: 50 }}
+			domainPadding={{ x: type === 'candlestick' ? [4, 4] : [0, 0] }}
 			style={{ parent: { overflow: 'visible' } }}
 			scale={{ x: 'time' }}>
 			<VictoryAxis
@@ -88,7 +101,6 @@ const CandleStick = forwardRef((ref: any) => {
 				tickComponent={<LineSegment />}
 				dependentAxis
 				tickCount={10}
-				domainPadding={50}
 				minDomain={{ y: 0 }}
 				maxDomain={{ y: 300 }}
 			/>
@@ -98,61 +110,45 @@ const CandleStick = forwardRef((ref: any) => {
 				tickFormat={(t) => tickFormatInit(t)}
 				height={200}
 			/>
-			<VictoryCandlestick
-				style={styleCandle}
-				labelComponent={
-					<VictoryTooltip
-						dx={0}
-						dy={0}
-						cornerRadius={0}
-						pointerLength={0}
-						flyoutStyle={{
-							stroke: '#303030',
-							strokeWidth: 1,
-							fill: 'white',
-						}}
-						style={{ fontSize: 15, fontFamily: 'Open Sans' }}
-						centerOffset={{ x: 0, y: 0 }}
-						flyoutComponent={
-							<Tool
-								xC={((mouseCoordinate.x - 100) * 1440) / chartSizeState.width}
-								yC={((mouseCoordinate.y - 50) * 720) / chartSizeState.height}
-							/>
-						}
-					/>
-				}
-				labels={() => ''}
-				events={[
-					{
-						target: 'data',
-						eventHandlers: {
-							onMouseEnter: (e: any) => {
-								let mouseCoordinate: Mouse = { x: 0, y: 0 };
-								let x: number = e.pageX;
-								let y: number = e.pageY;
 
-								if (ref) {
-									mouseCoordinate.x = x - ref.current.offsetLeft;
-									mouseCoordinate.y = y - ref.current.offsetTop;
-								}
-
-								batch(() => dispatch(calculateXY(mouseCoordinate)));
-							},
-						},
-					},
-				]}
-				candleColors={{ positive: '#00a000', negative: '#ff0000' }}
-				x="x"
-				y="y"
-				open={'open'}
-				close={'close'}
-				high={'high'}
-				low="low"
-				width={200}
-				data={chartInfo}
-			/>
+			{type === 'candlestick' ? (
+				<VictoryCandlestick
+					style={styleCandle}
+					labelComponent={
+						<VictoryTooltip
+							dx={0}
+							dy={0}
+							cornerRadius={0}
+							pointerLength={0}
+							flyoutStyle={{
+								stroke: '#303030',
+								strokeWidth: 1,
+								fill: 'white',
+							}}
+							style={{ fontSize: 15, fontFamily: 'Open Sans' }}
+							centerOffset={{ x: 0, y: 0 }}
+							
+							flyoutComponent={<Tool />}
+						/>
+					}
+					labels={() => ''}
+					candleColors={{ positive: '#00a000', negative: '#ff0000' }}
+					x="x"
+					y="y"
+					open={'open'}
+					close={'close'}
+					high={'high'}
+					low="low"
+					width={100}
+					data={chartInfo}
+				/>
+			) : (
+				<VictoryGroup data={chartInfo}>
+					<VictoryArea style={{ data: { stroke: '#05b1eb', strokeWidth: 1, fill: '#05b1eb25' } }} />
+				</VictoryGroup>
+			)}
 		</VictoryChart>
 	);
-});
+};
 
 export default CandleStick;

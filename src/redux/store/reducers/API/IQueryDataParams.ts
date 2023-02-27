@@ -13,5 +13,5 @@ export interface IQueryDataParams {
 		| '88WOO3GUK7BE4DU3'
 		| 'QASSUGBXA2SRIW6Q'
 		| 'YG6HDNFAQSGMZA5E';
-	interval?: '1min' | '5min' | '15min' | '30min' | '60min';
+	interval: number | undefined;
 }

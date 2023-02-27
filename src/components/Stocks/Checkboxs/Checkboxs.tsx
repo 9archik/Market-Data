@@ -1,37 +1,66 @@
 import styles from './style.module.css';
 import candleStickSvg from '../../../images/candleStick.svg';
 import lineChartSvg from '../../../images/lineChart.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAppSelector } from '../../../hooks/redux';
+import { useAppDispatch } from './../../../hooks/redux';
+import { setStockQueryParamsInterval } from '../../../redux/store/reducers/stockQueryParamsSlice';
+import { setIntervalSlice, setType } from '../../../redux/store/reducers/chartInfoSlice';
 export interface IChartType {
 	src: string;
-	value: string;
+	value: 'candlestick' | 'line';
 	checked: boolean;
 }
 
 export interface IIntervalType {
 	value: string;
 	checked: boolean;
+	interval: number | undefined;
+	typeInterval: 'INTRADAY' | 'DAILY_ADJUSTED' | 'WEEKLY' | 'MONTHLY';
+	timeSeries: string;
 }
 
 const chartTypeList: IChartType[] = [
-	{ src: candleStickSvg, value: 'candleStick', checked: true },
-	{ src: lineChartSvg, value: 'lineChart', checked: false },
+	{ src: candleStickSvg, value: 'candlestick', checked: true },
+	{ src: lineChartSvg, value: 'line', checked: false },
 ];
 
 const intervalTypeList: IIntervalType[] = [
-	{ value: '1', checked: false },
-	{ value: '5', checked: false },
-	{ value: '15', checked: false },
-	{ value: '30', checked: false },
-	{ value: '1D', checked: true },
-	{ value: '1W', checked: false },
+	{ value: '1', checked: false, interval: 1, typeInterval: 'INTRADAY', timeSeries: '1min' },
+	{ value: '5', checked: false, interval: 5, typeInterval: 'INTRADAY', timeSeries: '5min' },
+	{ value: '15', checked: false, interval: 15, typeInterval: 'INTRADAY', timeSeries: '15min' },
+	{ value: '30', checked: false, interval: 30, typeInterval: 'INTRADAY', timeSeries: '30min' },
+	{
+		value: '1D',
+		checked: true,
+		interval: undefined,
+		typeInterval: 'DAILY_ADJUSTED',
+		timeSeries: 'Daily',
+	},
+	{
+		value: '1W',
+		checked: false,
+		interval: undefined,
+		typeInterval: 'WEEKLY',
+		timeSeries: 'Weekly',
+	},
+	{
+		value: '1M',
+		checked: false,
+		interval: undefined,
+		typeInterval: 'MONTHLY',
+		timeSeries: 'Monthly',
+	},
 ];
 const Checkboxs = () => {
-	const [type, setType] = useState<IChartType[]>(chartTypeList);
+	const dispatch = useAppDispatch();
+	const [typeList, setTypeList] = useState<IChartType[]>(chartTypeList);
 
-	const [interval, setInterval] = useState<IIntervalType[]>(intervalTypeList);
+	const [intervalList, setIntervalList] = useState<IIntervalType[]>(intervalTypeList);
 
-	console.log(interval);
+	const queryParams = useAppSelector((state) => state.stockQueryParamsReducer);
+
+	const { interval: intervalState } = useAppSelector((state) => state.chartInfoReducer);
 
 	const handleType = (arr: IChartType[], index: number) => {
 		let copy = [...arr];
@@ -39,11 +68,12 @@ const Checkboxs = () => {
 			copy.map((el, i: number) => {
 				if (index === i) {
 					el.checked = true;
+					dispatch(setType(el.value));
 				} else {
 					el.checked = false;
 				}
 			});
-			setType(copy);
+			setTypeList(copy);
 		}
 	};
 
@@ -53,13 +83,18 @@ const Checkboxs = () => {
 			copy.map((el, i: number) => {
 				if (index === i) {
 					el.checked = true;
+					dispatch(setIntervalSlice(el.timeSeries));
 				} else {
 					el.checked = false;
 				}
 			});
-			setInterval(copy);
+			setIntervalList(copy);
 		}
 	};
+
+	useEffect(() => {
+		dispatch(setStockQueryParamsInterval(intervalList));
+	}, [intervalList]);
 
 	return (
 		<div className={styles.container}>
@@ -68,7 +103,7 @@ const Checkboxs = () => {
 					{chartTypeList.map((el: IChartType, index: number) => {
 						return (
 							<label
-								onClick={() => handleType(type, index)}
+								onClick={() => handleType(typeList, index)}
 								className={styles.typeChart}
 								id="typeChart">
 								<input
@@ -89,7 +124,7 @@ const Checkboxs = () => {
 					{intervalTypeList.map((el: IIntervalType, index: number) => {
 						return (
 							<label
-								onClick={() => handleInterval(interval, index)}
+								onClick={() => handleInterval(intervalList, index)}
 								className={styles.interval}
 								id="interval">
 								<input

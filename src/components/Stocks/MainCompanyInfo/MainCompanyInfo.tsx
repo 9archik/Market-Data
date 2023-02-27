@@ -9,6 +9,10 @@ import style from './MainCompanyInfo.module.css';
 import { useAppSelector } from '../../../hooks/redux';
 import { createContainer } from 'victory';
 import { useParams } from 'react-router-dom';
+import { stockToolsApi } from '../../../redux/store/reducers/API/stocksTools.api';
+import { IStockData } from '../../../models/IStockData';
+import { IStockTools } from '../../../models/IStockTools';
+import { marketInfoApi } from './../../../redux/store/reducers/API/marketInfo.api';
 
 interface IStockMainInfo {
 	symbol: string;
@@ -19,18 +23,48 @@ interface IStockMainInfo {
 
 const MainCompanyInfo: React.FC = React.memo(() => {
 	const searchValue = useAppSelector((state) => state.searchQueryValueReducer);
-    const {name} = useParams()
-    const VictoryContainer = createContainer('zoom', 'cursor');
 
-	const [queryParams, setQueryParams] = useState<IQueryDataParams>({
+	const { name } = useParams();
+
+	const VictoryContainer = createContainer('zoom', 'cursor');
+
+	const [queryParams, setQueryParams] = useState<
+		Pick<IQueryDataParams, 'symbol' | 'outputSize' | 'apiKey'>
+	>({
 		symbol: name,
 		outputSize: 'compact',
 		apiKey: 'UYWA0OMDMCKUSCJ3',
 	});
 
 	const {
+		data: stockData,
+		isFetching: stockLoading,
+		isError: stockError,
+	} = stockToolsApi.useGetStockToolsQuery(name);
+
+	const {
+		data: marketData,
+		isFetching: marketLoading,
+		isError: marketError,
+	} = marketInfoApi.useGetMarketInfoQuery(queryParams);
+	const marketStatus = (): string => {
+		if (marketData && marketData.markets) {
+			for (let i = 0; i < marketData.markets.length; i++) {
+				if (
+					stockData &&
+					stockData.bestMatches &&
+					stockData.bestMatches[0]['4. region'] === marketData.markets[i].region
+				) {
+					return marketData.markets[i].current_status as string;
+				}
+			}
+		}
+		return 'error';
+	};
+
+	const {
 		data: mainData,
-		isLoading: mainDataLoading,
+		isFetching: mainDataLoading,
 		isError: mainDataError,
 	} = stockDataApi.useGetStockQuoteDataQuery(queryParams);
 
@@ -47,7 +81,6 @@ const MainCompanyInfo: React.FC = React.memo(() => {
 			apiKey: 'UYWA0OMDMCKUSCJ3',
 		});
 	}, [name]);
-
 
 	useEffect(() => {
 		if (mainData && mainData['Global Quote'] && !mainDataLoading) {
@@ -74,15 +107,15 @@ const MainCompanyInfo: React.FC = React.memo(() => {
 	}, [searchValue, mainData, mainDataLoading, mainDataError]);
 
 	if (mainDataLoading) {
-		return <div>Данные загружаются</div>;
+		return <div>Loading</div>;
 	}
 
 	if (mainDataError) {
-		return <div>Ошибка</div>;
+		return <div>Error</div>;
 	}
 
-	if (!(mainData && mainData['Global Quote'])) {
-		return <div>Результатов нет</div>;
+	if (!(mainData && mainData['Global Quote'] && Object.keys(mainData['Global Quote']).length !== 0)) {
+		return <div>Stock is not found</div>;
 	}
 
 	return (
@@ -107,6 +140,12 @@ const MainCompanyInfo: React.FC = React.memo(() => {
 								{'%)'}
 							</span>
 						</div>
+						{stockData ? (
+							<div className="text-3xl">currency: {stockData.bestMatches[0]['8. currency']}</div>
+						) : (
+							<></>
+						)}
+						{marketStatus() !== 'error' && <div className="text-3xl">status: {marketStatus()}</div>}
 					</div>
 				</div>
 			)}
