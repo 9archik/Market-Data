@@ -30,7 +30,8 @@ import { months } from '../../constants/stocks';
 import Chart from './Chart/Chart';
 import Checkboxs from './Checkboxs/Checkboxs';
 import DetailedInfo from './DetailedInfo/DetailedInfo';
-import NewsList from './NewsList/NewsList';
+import NewsList from '../NewsList/NewsList';
+import NewsStocks from './NewsStocks/NewsStocks';
 
 const Stocks = React.memo(() => {
 	return (
@@ -39,7 +40,7 @@ const Stocks = React.memo(() => {
 			<Checkboxs />
 			<Chart />
 			<DetailedInfo />
-			<NewsList/>
+			<NewsStocks/>
 		</section>
 	);
 });

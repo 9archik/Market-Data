@@ -1,0 +1,39 @@
+.accordion {
+	@apply flex justify-between overflow-hidden;
+}
+
+.contAccordion {
+	transition: 1s;
+}
+
+.newsCategory {
+	@apply w-8 h-8 relative;
+}
+
+.newsCategory input {
+	@apply opacity-0 w-full h-full;
+}
+
+.newsCategory input + span {
+	@apply absolute bg-slate-50 rounded-md w-full h-full opacity-100 top-0 border-[1px] border-[#d5d5d5] left-0;
+}
+
+.newsCategory input:checked + span {
+	@apply absolute rounded-md w-full h-full opacity-100 top-0 border-[1px] border-[#d5d5d5] left-0;
+}
+
+.newsSort {
+	@apply w-8 h-8 relative;
+}
+
+.newsSort input {
+	@apply opacity-0 w-full h-full;
+}
+
+.newsSort input + span {
+	@apply absolute bg-slate-50 rounded-full w-full h-full opacity-100 top-0 border-[1px] border-[#d5d5d5] left-0;
+}
+
+.newsSort input:checked + span {
+	@apply before:w-3 before:h-3 before:absolute before:bg-slate-400 before:bottom-1/2 before:right-1/2 before:translate-x-1/2 before:translate-y-1/2 before:rounded-full;
+}

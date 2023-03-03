@@ -10,7 +10,7 @@
 	left: 20px;
 }
 
-input {
+.input input {
 	width: 320px;
 	height: 100%;
 	border-radius: 8px;
@@ -19,6 +19,14 @@ input {
 	outline: 0;
 	font-family: 'Open Sans';
 	background-color: transparent;
+}
+
+@media (max-width:480px)
+{
+	.input input 
+	{
+		width:193px;
+	}
 }
 
 .link {

@@ -92,6 +92,8 @@ const Checkboxs = () => {
 		}
 	};
 
+	console.log(intervalState);
+
 	useEffect(() => {
 		dispatch(setStockQueryParamsInterval(intervalList));
 	}, [intervalList]);

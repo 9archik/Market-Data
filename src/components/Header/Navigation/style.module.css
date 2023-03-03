@@ -1,4 +1,4 @@
-ul {
+.desktopList {
 	display: flex;
 	gap: 60px;
 }
@@ -22,4 +22,18 @@ ul {
 
 .link:hover::after {
 	opacity: 1;
+}
+
+.mobileNavigationList {
+	@apply w-10 outline-none h-6 relative before:absolute before:w-full before:left-0 before:h-[2px] 
+            before:bg-slate-600 after:bottom-0  before:top-0 after:absolute 
+	after:w-full after:left-0 after:h-[2px] after:bg-slate-600 after:bottom-0 after:transition-all before:transition-all;
+}
+
+.mobileNavigationList.open {
+	@apply before:rotate-45 before:top-1/2 after:rotate-[-45deg] after:bottom-1/2 after:bottom-[9px];
+}
+
+.mobileNavigationList.open > span {
+	@apply opacity-0;
 }

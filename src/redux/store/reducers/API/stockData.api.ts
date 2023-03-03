@@ -9,12 +9,12 @@ export const stockDataApi = createApi({
 	endpoints: (builder) => ({
 		getStockIntraDayData: builder.query<any, IQueryDataParams>({
 			query: (params: IQueryDataParams) => ({
-				url: `query?function=TIME_SERIES_INTRADAY&symbol=${params.symbol}&outputsize=compact&apikey=${params.apiKey}&interval=${params.interval}min`,
+				url: `query?function=TIME_SERIES_INTRADAY&symbol=${params.symbol}&outputsize=compact&apikey=QO311JGL3C72CEBS&interval=${params.interval}min`,
 			}),
 		}),
 		getStockData: builder.query<any, IQueryDataParams>({
 			query: (params: IQueryDataParams) => ({
-				url: `query?function=${params.function}&symbol=${params.symbol}&outputsize=${params.outputSize}&apikey=${params.apiKey}`,
+				url: `query?function=${params.function}&symbol=${params.symbol}&outputsize=${params.outputSize}&apikey=ZIWLFR0ET3JQ5QUB`,
 			}),
 		}),
 		getStockQuoteData: builder.query<

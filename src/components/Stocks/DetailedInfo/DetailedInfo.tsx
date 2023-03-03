@@ -55,12 +55,12 @@ const DetailedInfo = () => {
     }
 
 	return (
-		<ul className="grid mt-10 grid-cols-3 gap-x-[12rem]">
+		<ul className="xl:grid-cols-3 grid mt-10 grid-cols-1 md:grid-cols-2 gap-x-[12rem]">
 			{list &&
 				list.map((el) => {
 					return (
-						<li className="flex border-b-2 pb-4 border-b-[#535353] justify-between text-2xl ">
-							<span >{el.name}</span> <span className="font-bold">{el.value}</span>
+						<li className="flex border-b-2 pb-4 border-b-[#535353] justify-between text-2xl  ">
+							<span>{el.name}</span> <span className="font-bold">{el.value}</span>
 						</li>
 					);
 				})}

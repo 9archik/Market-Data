@@ -6,7 +6,7 @@ import styles from './style.module.css';
 const Navigation: React.FC = () => {
 	return (
 		<nav>
-			<ul>
+			<ul className={styles.desktopList}>
 				{listLinks.map((el: Links, index: number) => {
 					return (
 						<li key={index}>

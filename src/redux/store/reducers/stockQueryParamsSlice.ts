@@ -15,6 +15,7 @@ const stockQueryParamsSlice = createSlice({
 	initialState,
 	reducers: {
 		setStockQueryParamsInterval(state: IQueryDataParams, action: PayloadAction<IIntervalType[]>) {
+		
 			for (let i = 0; i < action.payload.length; i++) {
 				if (action.payload[i].checked) {
 					state.interval = action.payload[i].interval;

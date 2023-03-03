@@ -7,9 +7,14 @@ export interface INews {
 	time_published?: string;
 }
 
-export interface INewsList
-{
-    feed: INews[],
+export interface INewsList {
+	feed: INews[];
+}
+
+export interface INewsQueryParams {
+	tickers: string;
+	topics: string;
+	sort: string;
 }
 export const newsMarketApi = createApi({
 	reducerPath: 'newsMarketApi',
@@ -22,7 +27,12 @@ export const newsMarketApi = createApi({
 				}&apikey=88A9A2ZQOCRAWD1K`,
 			}),
 		}),
+		getNews: builder.query<INewsList, INewsQueryParams>({
+			query: (symbol: INewsQueryParams) => ({
+				url: `query?function=NEWS_SENTIMENT&tickers=${symbol.tickers}&topics=${symbol.topics}&sort=${symbol.sort}&limit=200&apikey=2BOI0MO69QC39OUH`,
+			}),
+		}),
 	}),
 });
 
-export const { useGetCompanyNewsQuery } = newsMarketApi;
+export const { useGetCompanyNewsQuery, useGetNewsQuery } = newsMarketApi;

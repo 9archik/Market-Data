@@ -1,48 +1,37 @@
-.container
-{
-    @apply w-full mt-4 flex justify-center
+.container {
+	@apply w-full mt-4 flex justify-center;
 }
 
-.form
-{
-    @apply border-[#777] w-1/2 p-1 border-2 flex gap-3 flex-row justify-around
-
+.form {
+	@apply border-[#777] w-full sm:w-3/4 lg:w-1/2 p-1 border-2 flex gap-3 flex-row justify-around;
 }
 
-.typeChart
-{
-    @apply w-8 h-8 flex justify-center items-center
+.typeChart {
+	@apply w-8 h-8 flex justify-center items-center;
 }
 
-.typeChartContainer
-{
-    @apply flex gap-7 border-r-2 border-[#777] pr-5
+.typeChartContainer {
+	@apply flex gap-2 sm:gap-7 border-r-2 border-[#777] pr-5;
 }
 
-.checkbox
-{
-    @apply w-0 h-0 opacity-0
+.checkbox {
+	@apply w-0 h-0 opacity-0;
 }
 
-.checkbox + span
-{
-    @apply w-full h-full flex justify-center items-center cursor-pointer
+.checkbox + span {
+	@apply w-full h-full flex justify-center items-center cursor-pointer;
 }
-.checkbox:checked + span
-{
-    @apply border-2 border-[#949494]
+.checkbox:checked + span {
+	@apply border-2 border-[#949494];
 }
-.intervalContainer
-{
-    @apply flex gap-7
+.intervalContainer {
+	@apply flex gap-2 sm:gap-7;
 }
 
-.interval
-{
-    @apply w-8 h-8 flex justify-center items-center 
+.interval {
+	@apply w-8 h-8 flex justify-center items-center;
 }
 
-.interval > span
-{
-    @apply text-lg font-bold text-[#200db2]
+.interval > span {
+	@apply text-lg font-bold text-[#200db2];
 }

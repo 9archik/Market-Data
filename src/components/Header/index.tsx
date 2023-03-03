@@ -14,6 +14,7 @@ import Navigation from './Navigation/Navigation';
 import { faChartLine } from '@fortawesome/free-solid-svg-icons';
 import Input from './Input/Input';
 import { stockDataApi } from '../../redux/store/reducers/API/stockData.api';
+import MobileNavigation from './Navigation/MobileNavigation';
 
 export interface Links {
 	text: string;
@@ -21,15 +22,23 @@ export interface Links {
 }
 
 const Header = () => {
+	const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
 
+	function resize(e: Event) {
+		setWindowWidth(window.innerWidth);
+	}
+	useEffect(() => {
+		window.addEventListener('resize', resize);
+		return () => window.addEventListener('resize', resize);
+	}, []);
 	return (
-		<header>
-			<div className={[styles.container, 'container'].join(' ')}>
+		<header className="overflow-x-hidden">
+			<div className={[styles.container, 'relative', 'container'].join(' ')}>
 				<FontAwesomeIcon className={styles.logo} icon={faChartLine} />
-				
+
 				<Input />
 
-				<Navigation />
+				{windowWidth < 768 ? <MobileNavigation /> : <Navigation />}
 			</div>
 		</header>
 	);

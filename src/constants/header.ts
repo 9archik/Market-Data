@@ -1,7 +1,7 @@
 import { Links } from "../components/Header";
 
 export const listLinks: Array<Links> = [
-	{ text: 'stocks', address: '/' },
+	{ text: 'news', address: '/' },
 	{ text: 'currency', address: '/' },
-	{ text: 'crypto', address: '/' },
+	{ text: 'commodities', address: '/' },
 ];

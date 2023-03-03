@@ -29,24 +29,23 @@ const initialState: IChartInfo = {
 	interval: 'Daily',
 };
 
-
-
 const chartInfoSlice = createSlice({
 	name: 'chartInfo',
 	initialState,
 	reducers: {
 		setChartInfo(state: IChartInfo, action: PayloadAction<any>) {
 			if (state.type === 'candlestick') {
-			
-				if (
-					action.payload &&
+				if (action.payload &&
 					(action.payload[`Time Series (${state.interval})`] ||
-						action.payload[`${state.interval} Time Series`])
-				) {
+						action.payload[`${state.interval} Time Series`])) 
+					{  
+	
 					let arrData =
 						state.interval !== 'Weekly' && state.interval !== 'Monthly'
 							? action.payload[`Time Series (${state.interval})`]
 							: action.payload[`${state.interval} Time Series`];
+
+
 					let arr: ICandlestickInfo[] = [];
 
 					let highArr: number[] = [];
@@ -85,15 +84,16 @@ const chartInfoSlice = createSlice({
 					state.data = arr;
 					state.maxDomain = highArr[highArr.length - 1];
 					state.minDomain = lowArr[0];
-                   
-					console.log('state', arrData);
+
+			
 				}
 			} else {
 				if (
 					action.payload &&
 					(action.payload[`Time Series (${state.interval})`] ||
 						action.payload[`${state.interval} Time Series`])
-				) {
+				) {  
+		
 					let arrData =
 						state.interval !== 'Weekly' && state.interval !== 'Monthly'
 							? action.payload[`Time Series (${state.interval})`]

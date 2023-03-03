@@ -42,6 +42,7 @@ const Input: React.FC = () => {
 
 			<input
 				value={inputValue}
+			
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
 				type="text"
 				placeholder="enter text for search company"

@@ -18,7 +18,9 @@ export const stockToolsApi = createApi({
 	endpoints: (builder) => ({
 		getStockTools: builder.query<IStockToolsList, string | undefined>({
 			query: (keyword: string | undefined) => ({
-				url: `query?keywords=${keyword !== undefined ? keyword : ''}&function=SYMBOL_SEARCH&datatype=json`,
+				url: `query?keywords=${
+					keyword !== undefined ? keyword : ''
+				}&function=SYMBOL_SEARCH&datatype=json`,
 			}),
 		}),
 	}),
