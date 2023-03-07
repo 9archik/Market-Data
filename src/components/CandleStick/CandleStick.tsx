@@ -43,6 +43,8 @@ const VictoryZoomVoronoiContainer = createContainer<
 const CandleStick = () => {
 	const chartSizeState = useAppSelector((state) => state.chartSizeReducer);
 
+	let contRef = useRef<any>(null);
+
 	const [zoom, setZoom] = useState<number>(1305241712);
 
 	const { data: chartInfo } = useAppSelector((state) => state.chartInfoReducer);
@@ -50,7 +52,6 @@ const CandleStick = () => {
 	const { maxDomain } = useAppSelector((state) => state.chartInfoReducer);
 
 	const { minDomain } = useAppSelector((state) => state.chartInfoReducer);
-
 
 	const dispatch = useAppDispatch();
 
@@ -65,12 +66,22 @@ const CandleStick = () => {
 		else return `${t.getDate()} ${months[t.getMonth()]} ${t.getFullYear()} ${t.getHours()}:00`;
 	};
 
+
+	useEffect(() => {
+        if(contRef && contRef.current )
+		{
+			console.log(contRef.current.children[0].children[2].styles);
+		}
+	}, [])
+
 	return (
 		<VictoryChart
 			containerComponent={
 				<VictoryZoomVoronoiContainer
+					containerRef={(ref) => (contRef.current = ref)}
 					onZoomDomainChange={(domain, props) => handleZoomChange(domain.x)}
 					voronoiDimension="x"
+					zoomDimension="x"
 				/>
 			}
 			maxDomain={{ y: maxDomain }}

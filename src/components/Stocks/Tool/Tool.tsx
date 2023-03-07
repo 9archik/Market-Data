@@ -22,14 +22,14 @@ const Tool = ({ datum }: IPropType) => {
 
 	const chartSizeState = useAppSelector((state) => state.chartSizeReducer);
 
-
+     console.log('x', mouseCoordinate.x);
 	return (
 		<g>
 			<foreignObject
 				width={100}
 				height={140}
-				x={((mouseCoordinate.x-100) * 1440) / chartSizeState.width}
-				y={((mouseCoordinate.y-50) * 720) / chartSizeState.height}
+				x={((mouseCoordinate.x) * 1440) / chartSizeState.width}
+				y={((mouseCoordinate.y) * 720) / chartSizeState.height}
 				style={styleForeignObject}>
 				<div className={styles.containerTool} style={styleContainer}>
 					{arrayValues.map((el) => {

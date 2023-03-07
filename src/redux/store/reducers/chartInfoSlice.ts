@@ -19,6 +19,7 @@ export interface IChartInfo {
 	maxDomain: number;
 	minDomain: number;
 	interval: string;
+	error: boolean;
 }
 
 const initialState: IChartInfo = {
@@ -27,6 +28,7 @@ const initialState: IChartInfo = {
 	minDomain: 0,
 	maxDomain: 100,
 	interval: 'Daily',
+	error: false,
 };
 
 const chartInfoSlice = createSlice({
@@ -35,16 +37,15 @@ const chartInfoSlice = createSlice({
 	reducers: {
 		setChartInfo(state: IChartInfo, action: PayloadAction<any>) {
 			if (state.type === 'candlestick') {
-				if (action.payload &&
+				if (
+					action.payload &&
 					(action.payload[`Time Series (${state.interval})`] ||
-						action.payload[`${state.interval} Time Series`])) 
-					{  
-	
+						action.payload[`${state.interval} Time Series`])
+				) {
 					let arrData =
 						state.interval !== 'Weekly' && state.interval !== 'Monthly'
 							? action.payload[`Time Series (${state.interval})`]
 							: action.payload[`${state.interval} Time Series`];
-
 
 					let arr: ICandlestickInfo[] = [];
 
@@ -52,7 +53,11 @@ const chartInfoSlice = createSlice({
 
 					let lowArr: number[] = [];
 
+					let index=0;
+
 					for (const key in arrData) {
+                        if(index === 100)
+						break;
 						let value: ICandlestickInfo = {
 							open: 0,
 							close: 0,
@@ -77,23 +82,26 @@ const chartInfoSlice = createSlice({
 
 						highArr.push(value.high);
 						lowArr.push(value.low);
+						index++;
+
 					}
 
 					highArr.sort((a, b) => a - b);
 					lowArr.sort((a, b) => a - b);
+
 					state.data = arr;
 					state.maxDomain = highArr[highArr.length - 1];
 					state.minDomain = lowArr[0];
-
-			
+					state.error=false;
+				} else {
+					state.error = true;
 				}
 			} else {
 				if (
 					action.payload &&
 					(action.payload[`Time Series (${state.interval})`] ||
 						action.payload[`${state.interval} Time Series`])
-				) {  
-		
+				) {
 					let arrData =
 						state.interval !== 'Weekly' && state.interval !== 'Monthly'
 							? action.payload[`Time Series (${state.interval})`]
@@ -123,9 +131,12 @@ const chartInfoSlice = createSlice({
 
 					highArr.sort((a, b) => a - b);
 					lowArr.sort((a, b) => a - b);
-					state.data = arr;
+					state.data = 	(state.interval === 'Weekly' || state.interval === 'Monthly') ? arr.slice(0,52) : arr ;
 					state.maxDomain = highArr[highArr.length - 1];
 					state.minDomain = lowArr[0];
+					state.error=false;
+				} else {
+					state.error = true;
 				}
 			}
 		},

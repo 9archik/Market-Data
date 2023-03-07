@@ -48,6 +48,12 @@ const Chart = () => {
 
 	const { data: chartInfo } = useAppSelector((state) => state.chartInfoReducer);
 
+	const { minDomain } = useAppSelector((state) => state.chartInfoReducer);
+
+	const { maxDomain } = useAppSelector((state) => state.chartInfoReducer);
+
+	const { error } = useAppSelector((state) => state.chartInfoReducer);
+
 	const { type } = useAppSelector((state) => state.chartInfoReducer);
 
 	const dispatch = useAppDispatch();
@@ -59,7 +65,7 @@ const Chart = () => {
 				width: contRef.current.offsetWidth,
 			};
 			dispatch(setChartSize(chSize));
-			contRef.current.children[0].children[0].children[0].attributes[3].nodeValue = '0 0 1480 720';
+			contRef.current.children[0].children[0].children[0].attributes[3].nodeValue = '0 0 1440 720';
 		}
 	}
 
@@ -69,39 +75,42 @@ const Chart = () => {
 		dispatch(setStockQueryParamsName(name));
 	}, [name]);
 
-	
-
 	useEffect(() => {
 		if (contRef && contRef.current) {
-			contRef.current.children[0].children[0].children[0].attributes[3].nodeValue = '0 0 1480 720';
+			contRef.current.children[0].children[0].children[0].attributes[3].nodeValue = '0 0 1440 720';
 		}
 		window.addEventListener('resize', resize);
 		return () => window.addEventListener('resize', resize);
 	}, [chartInfo]);
-   
+
 	console.log(data);
 
 	useEffect(() => {
-	
 		dispatch(setChartInfo(data));
 	}, [data, queryParams, intervalState, type]);
 
-
 	const mouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		let x = e.pageX,
-			y = e.pageY;
+		let x = e.clientX,
+			y = e.clientY;
+
+		console.log('y: ', y - contRef.current.offsetTop);
 
 		dispatch(calculateXY({ x: x - contRef.current.offsetLeft, y: y - contRef.current.offsetTop }));
 	};
 
-
+	useEffect(() => {
+		let chSize: chartSize = {
+			height: window.innerHeight,
+			width: window.innerWidth,
+		};
+		dispatch(setChartSize(chSize));
+	}, []);
 
 	if (isFetching) {
 		return (
 			<div
 				className="flex justify-center items-center"
 				style={{
-				
 					maxWidth: 1440,
 					maxHeight: 720,
 				}}>
@@ -110,11 +119,21 @@ const Chart = () => {
 		);
 	}
 
+	if (error) {
+		return (
+			<div
+				style={{
+					maxWidth: 1440,
+					maxHeight: 720,
+				}}>
+				Error
+			</div>
+		);
+	}
 	if (chartInfo && chartInfo.length === 0) {
 		return (
 			<div
 				style={{
-			
 					maxWidth: 1440,
 					maxHeight: 720,
 				}}></div>
@@ -136,9 +155,13 @@ const Chart = () => {
 						height: chartSizeState.width * 0.5,
 						maxWidth: 1440,
 						maxHeight: 720,
-						cursor: "crosshair"
+						cursor: 'crosshair',
 					}}>
-					{type === 'candlestick' ? <CandleStick /> : <LineChart />}
+					{type === 'candlestick' ? (
+						<CandleStick />
+					) : (
+						<LineChart data={chartInfo} maxDomain={maxDomain} minDomain={minDomain} />
+					)}
 				</div>
 			</div>
 		</>

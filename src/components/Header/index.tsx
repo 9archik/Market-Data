@@ -32,7 +32,7 @@ const Header = () => {
 		return () => window.addEventListener('resize', resize);
 	}, []);
 	return (
-		<header className="overflow-x-hidden">
+		<header>
 			<div className={[styles.container, 'relative', 'container'].join(' ')}>
 				<FontAwesomeIcon className={styles.logo} icon={faChartLine} />
 

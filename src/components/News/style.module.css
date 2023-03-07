@@ -1,5 +1,5 @@
 .accordion {
-	@apply flex justify-between overflow-hidden;
+	@apply flex justify-between overflow-hidden flex-col sm:flex-row;
 }
 
 .contAccordion {

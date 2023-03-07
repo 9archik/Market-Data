@@ -44,14 +44,21 @@ export const VictoryCursorVoronoiContainer = createContainer<
 	VictoryVoronoiContainerProps
 >('cursor', 'voronoi');
 
-const LineChart = () => {
+export interface ILineChartProps
+{
+    data: any,
+	maxDomain: number,
+	minDomain: number,
+}
+
+const LineChart = ({data, maxDomain, minDomain}: ILineChartProps) => {
 	const chartSizeState = useAppSelector((state) => state.chartSizeReducer);
 
-	const { data: chartInfo } = useAppSelector((state) => state.chartInfoReducer);
+	// const { data: chartInfo } = useAppSelector((state) => state.chartInfoReducer);
 
-	const { maxDomain } = useAppSelector((state) => state.chartInfoReducer);
+	// const { maxDomain } = useAppSelector((state) => state.chartInfoReducer);
 
-	const { minDomain } = useAppSelector((state) => state.chartInfoReducer);
+	// const { minDomain } = useAppSelector((state) => state.chartInfoReducer);
 
 	const [scatterData, setScatterData] = useState<IScatterData[] | undefined>(undefined);
 
@@ -98,7 +105,7 @@ const LineChart = () => {
 				height={200}
 			/>
 
-			<VictoryGroup data={chartInfo}>
+			<VictoryGroup data={data}>
 				<VictoryArea
 					labels={() => ''}
 					labelComponent={

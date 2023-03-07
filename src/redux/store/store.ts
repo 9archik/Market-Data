@@ -13,6 +13,7 @@ import { marketInfoApi } from './reducers/API/marketInfo.api';
 import stockQueryParamsReducer from './reducers/stockQueryParamsSlice';
 import { detailedStockDataApi } from './reducers/API/detailedStockData.api';
 import { newsMarketApi } from './reducers/API/newsMarket.api';
+import { currencyDataApi } from './reducers/API/currencyData.api';
 const rootReducer = combineReducers({
 	mouseReducer,
 	[stockToolsApi.reducerPath]: stockToolsApi.reducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
 	[marketInfoApi.reducerPath]: marketInfoApi.reducer,
 	[detailedStockDataApi.reducerPath]:detailedStockDataApi.reducer,
 	[newsMarketApi.reducerPath]: newsMarketApi.reducer,
+	[currencyDataApi.reducerPath]: currencyDataApi.reducer,
 	inputDebounceValueReducer,
 	searchQueryValueReducer,
 	toolListReducer,
@@ -38,6 +40,7 @@ export const setupStore = () => {
 				marketInfoApi.middleware,
 				detailedStockDataApi.middleware,
 				newsMarketApi.middleware,
+                currencyDataApi.middleware,
 			]),
 	});
 };

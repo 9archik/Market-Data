@@ -1,0 +1,27 @@
+.select-container {
+    width:50%;
+}
+.select__control {
+	width: 100% !important;
+	font-size: 20px !important;
+}
+
+.input__currency-value > input {
+	width: 100%;
+	font-size: 20px;
+	height: 45px;
+	font-weight: 700;
+	padding: 5px 10px;
+    border-radius: 2px;
+	outline: none;
+}
+
+
+@media(max-width:767px)
+{
+    .select-container
+    {
+        width:100%;
+    }
+}
+

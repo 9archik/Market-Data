@@ -26,6 +26,8 @@ const MainCompanyInfo: React.FC = React.memo(() => {
 
 	const { name } = useParams();
 
+	const [skip, setSkip] = useState(true);
+
 	const VictoryContainer = createContainer('zoom', 'cursor');
 
 	const [queryParams, setQueryParams] = useState<
@@ -40,13 +42,13 @@ const MainCompanyInfo: React.FC = React.memo(() => {
 		data: stockData,
 		isFetching: stockLoading,
 		isError: stockError,
-	} = stockToolsApi.useGetStockToolsQuery(name);
+	} = stockToolsApi.useGetStockToolsQuery(name, { skip: skip });
 
 	const {
 		data: marketData,
 		isFetching: marketLoading,
 		isError: marketError,
-	} = marketInfoApi.useGetMarketInfoQuery(queryParams);
+	} = marketInfoApi.useGetMarketInfoQuery(queryParams, { skip: skip });
 	const marketStatus = (): string => {
 		if (marketData && marketData.markets) {
 			for (let i = 0; i < marketData.markets.length; i++) {
@@ -66,7 +68,7 @@ const MainCompanyInfo: React.FC = React.memo(() => {
 		data: mainData,
 		isFetching: mainDataLoading,
 		isError: mainDataError,
-	} = stockDataApi.useGetStockQuoteDataQuery(queryParams);
+	} = stockDataApi.useGetStockQuoteDataQuery(queryParams, { skip: skip });
 
 	const [stockInfo, setStockInfo] = useState<IStockMainInfo | null>(null);
 
@@ -106,12 +108,18 @@ const MainCompanyInfo: React.FC = React.memo(() => {
 		}
 	}, [searchValue, mainData, mainDataLoading, mainDataError]);
 
+	useEffect(() => {
+       setSkip(false);
+	}, [])
+
+	console.log(mainData)
+
 	if (mainDataLoading) {
 		return <div>Loading</div>;
 	}
 
-	if (mainDataError) {
-		return <div>Error</div>;
+	if (mainDataError || (mainData && mainData.Note)) {
+		return <div>Server Error</div>;
 	}
 
 	if (!(mainData && mainData['Global Quote'] && Object.keys(mainData['Global Quote']).length !== 0)) {

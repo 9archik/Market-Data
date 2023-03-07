@@ -16,6 +16,8 @@ export interface IFilterNewsForm {
 export interface INewsTickers {
 	name: string;
 	checked: boolean;
+	input: boolean;
+	inputValue?: string;
 }
 
 export interface INewsTopics {
@@ -37,9 +39,9 @@ export interface IFormFields {
 
 const FilterNewsForm: IFilterNewsForm = {
 	tickers: [
-		{ name: 'COIN', checked: false },
-		{ name: 'CRYPTO', checked: false },
-		{ name: 'FOREX', checked: false },
+		{ name: 'COIN', checked: false, input: false },
+		{ name: 'CRYPTO', checked: false, input: true, inputValue: '' },
+		{ name: 'FOREX', checked: false, input: true, inputValue: '' },
 	],
 	topics: [
 		{ name: 'Blockchain', value: 'blockchain', checked: false },
@@ -65,7 +67,6 @@ const FilterNewsForm: IFilterNewsForm = {
 };
 
 const News = () => {
-	
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	const [memoData, setMemoData] = useState<INewsList | null>(null);
@@ -92,6 +93,8 @@ const News = () => {
 
 	const [skip, setSkip] = useState<boolean>(false);
 
+	const [inputValue, setInputValue] = useState<string>('');
+
 	const { data, isFetching, isError } = newsMarketApi.useGetNewsQuery(
 		{
 			tickers: tickersQuery,
@@ -112,11 +115,11 @@ const News = () => {
 	}, [openFilters]);
 
 	useEffect(() => {
-     
-
 		const tickers = [...tickersFilter];
 
-		const tickersArray: string[] = tickersQuery.split(',');
+		const tickersArray: string[] = tickersQuery.split(/\,|:/);
+
+		console.log(tickersArray);
 
 		for (let i = 0; i < tickers.length; i++) {
 			for (let j = 0; j < tickersArray.length; j++) {
@@ -148,6 +151,15 @@ const News = () => {
 				sort[i].checked = false;
 			}
 		}
+
+		window.addEventListener('resize', () => {
+			if (ref && ref.current) setHeightState(ref.current.scrollHeight);
+		});
+
+		return () =>
+			window.addEventListener('resize', () => {
+				if (ref && ref.current) setHeightState(ref.current.scrollHeight);
+			});
 	}, []);
 
 	const handleTickers = (index: number) => {
@@ -188,16 +200,21 @@ const News = () => {
 		let tickerQuery = '';
 		let topicsQuery = '';
 		let sortQuery = '';
-		form.tickers.forEach((el) => {
+		form.tickers.forEach((el, index) => {
 			if (el.checked) {
 				if (tickerQuery.length === 0) {
-					tickerQuery = tickerQuery + el.value;
+					tickerQuery =
+						tickerQuery + el.value + `${index > 0 ? `:${tickersFilter[index].inputValue}` : ''}`;
 				} else {
-					tickerQuery = tickerQuery + ',' + el.value;
+					tickerQuery =
+						tickerQuery +
+						',' +
+						el.value +
+						`${index > 0 ? `:${tickersFilter[index].inputValue}` : ''}`;
 				}
 			}
 		});
-		form.topics.forEach((el) => {
+		form.topics.forEach((el, index) => {
 			if (el.checked) {
 				if (topicsQuery.length === 0) {
 					topicsQuery = topicsQuery + el.value;
@@ -214,8 +231,6 @@ const News = () => {
 
 		setSearchParams({ tickers: tickerQuery, topics: topicsQuery, sort: sortQuery });
 	};
-
-	console.log(sortFilter);
 
 	return (
 		<>
@@ -241,28 +256,47 @@ const News = () => {
 						height: openFilters ? heightState + 20 : 0,
 					}}>
 					<ul className={`${styles.accordion} ${openFilters && styles.open}`}>
-						<li className="flex flex-col gap-5" key="tickers">
+						<li className="flex flex-col order-1 gap-5" key="tickers">
 							<h3 className="text-4xl font-bold mb-5">Tickers</h3>
 							{tickersFilter.map((el, index) => {
 								return (
-									<label className="flex gap-5 items-center cursor-pointer" key={index}>
-										<div className={styles.newsCategory}>
+									<>
+										<label className="flex gap-5 items-center cursor-pointer" key={index}>
+											<div className={styles.newsCategory}>
+												<div>
+													<input
+														name="tickers"
+														onClick={() => handleTickers(index)}
+														value={el.name}
+														type="checkbox"
+														checked={el.checked}
+													/>
+													<span>{el.checked && <img src={checkboxCheckSvg} />}</span>
+												</div>
+											</div>
+											<span>{el.name}</span>
+										</label>
+
+										{el.input && (
 											<input
-												name="tickers"
-												onClick={() => handleTickers(index)}
-												value={el.name}
-												type="checkbox"
-												checked={el.checked}
+												name={`tickersText`}
+												placeholder={`enter ${el.name}`}
+												type="text"
+												disabled={!el.checked}
+												onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+													let copy = [...tickersFilter];
+													copy[index].inputValue = e.target.value;
+													setTickersFilter(copy);
+												}}
+												value={`${!el.checked ? '' : el.inputValue}`}
 											/>
-											<span>{el.checked && <img src={checkboxCheckSvg} />}</span>
-										</div>
-										<span>{el.name}</span>
-									</label>
+										)}
+									</>
 								);
 							})}
 						</li>
 
-						<li className="flex flex-col gap-5" key="topics">
+						<li className="flex flex-col sm:order-2 order-3 gap-5" key="topics">
 							<h3 className="text-4xl font-bold mb-5">Topics</h3>
 							{topicsFilter.map((el, index) => {
 								return (
@@ -289,7 +323,7 @@ const News = () => {
 							</button>
 						</li>
 
-						<li className="flex flex-col gap-5" key="sort">
+						<li className="flex order-2 sm:order-3 flex-col gap-5" key="sort">
 							<h3 className="text-4xl font-bold mb-5">Sort</h3>
 							{sortFilter.map((el, index) => {
 								return (

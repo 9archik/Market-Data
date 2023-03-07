@@ -15,7 +15,7 @@ import { IStockToolsList } from '../../../models/IStockTools';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Input: React.FC = () => {
-	const [debounceSearchValue, inputValue, setInputValue] = useDebounce('', 1000);
+	const [debounceSearchValue, inputValue, setInputValue] = useDebounce('', 500);
 
 	const dispatch = useAppDispatch();
 

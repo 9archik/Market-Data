@@ -3,7 +3,7 @@ import candleStickSvg from '../../../images/candleStick.svg';
 import lineChartSvg from '../../../images/lineChart.svg';
 import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../../hooks/redux';
-import { useAppDispatch } from './../../../hooks/redux';
+import { useAppDispatch } from '../../../hooks/redux';
 import { setStockQueryParamsInterval } from '../../../redux/store/reducers/stockQueryParamsSlice';
 import { setIntervalSlice, setType } from '../../../redux/store/reducers/chartInfoSlice';
 export interface IChartType {

@@ -8,6 +8,7 @@ import Stocks from './components/Stocks';
 import StocksPage from './pages/StocksPage';
 import News from './components/News';
 import NotFoundPage from './pages/NotFoundPage';
+import CurrencyPage from './pages/CurrencyPage';
 
 function App() {
 	return (
@@ -15,7 +16,7 @@ function App() {
 			<Header />
 			<Routes>
 				<Route path="/stocks/:name" element={<StocksPage />} />
-				<Route path="/currency" element={<></>} />
+				<Route path="/currency" element={<><CurrencyPage/></>} />
 				<Route index element={<></>} />
 				<Route path="/commodities" element={<></>} />
 				<Route path="/news" element={<News />} />

@@ -1,0 +1,20 @@
+.disabledPage
+{
+    @apply text-2xl 
+}
+
+.activePage
+{
+    @apply text-2xl font-bold
+}
+
+
+.previousBtn
+{
+    @apply text-2xl
+}
+
+.nextBtn
+{
+    @apply text-2xl
+}

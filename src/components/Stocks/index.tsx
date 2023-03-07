@@ -34,13 +34,24 @@ import NewsList from '../NewsList/NewsList';
 import NewsStocks from './NewsStocks/NewsStocks';
 
 const Stocks = React.memo(() => {
+	const [openMore, setOpenMore] = useState<boolean>(false);
 	return (
-		<section className="stocks container mt-3">
+		<section className="stocks relative container mt-3">
 			<CompanyInfo />
 			<Checkboxs />
 			<Chart />
-			<DetailedInfo />
-			<NewsStocks/>
+			{!openMore ? (
+				<button
+					className="py-3 px-7 mt-5 rounded-md text-white absolute bg-black font-bold text-2xl right-1/2 translate-x-1/2"
+					onClick={() => setOpenMore(true)}>
+					More information
+				</button>
+			) : (
+				<>
+					<DetailedInfo />
+					<NewsStocks />
+				</>
+			)}
 		</section>
 	);
 });
