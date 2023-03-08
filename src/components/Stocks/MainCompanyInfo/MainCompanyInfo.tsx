@@ -112,7 +112,7 @@ const MainCompanyInfo: React.FC = React.memo(() => {
        setSkip(false);
 	}, [])
 
-	console.log(mainData)
+
 
 	if (mainDataLoading) {
 		return <div>Loading</div>;

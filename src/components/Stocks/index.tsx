@@ -16,7 +16,7 @@ import {
 	LineSegment,
 	Border,
 } from 'victory';
-import Tool from './Tool/Tool';
+
 import React from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks/redux';
 import { Mouse } from '../../redux/store/reducers/mouseSlice';
@@ -41,11 +41,13 @@ const Stocks = React.memo(() => {
 			<Checkboxs />
 			<Chart />
 			{!openMore ? (
-				<button
-					className="py-3 px-7 mt-5 rounded-md text-white absolute bg-black font-bold text-2xl right-1/2 translate-x-1/2"
-					onClick={() => setOpenMore(true)}>
-					More information
-				</button>
+				<div className="w-full mt-5 flex justify-center">
+					<button
+						className="py-3 px-7 mt-5 rounded-md text-white bg-black font-bold text-2xl"
+						onClick={() => setOpenMore(true)}>
+						More information
+					</button>
+				</div>
 			) : (
 				<>
 					<DetailedInfo />

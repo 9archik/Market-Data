@@ -1,10 +1,5 @@
 export interface IQueryDataParams {
-	function?:
-		| 'TIME_SERIES_INTRADAY'
-		| 'TIME_SERIES_DAILY_ADJUSTED'
-		| 'TIME_SERIES_WEEKLY'
-		| 'TIME_SERIES_MONTHLY'
-		| 'GLOBAL_QUOTE';
+	function?:string,
 	symbol: string | undefined;
 	outputSize: 'compact' | 'full';
 	apiKey:

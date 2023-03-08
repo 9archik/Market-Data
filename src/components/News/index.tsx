@@ -119,7 +119,7 @@ const News = () => {
 
 		const tickersArray: string[] = tickersQuery.split(/\,|:/);
 
-		console.log(tickersArray);
+
 
 		for (let i = 0; i < tickers.length; i++) {
 			for (let j = 0; j < tickersArray.length; j++) {

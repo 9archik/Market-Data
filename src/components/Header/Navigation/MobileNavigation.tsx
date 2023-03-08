@@ -15,7 +15,7 @@ const MobileNavigation = () => {
 			</button>
 
 			<ul 
-				className={`fixed text-5xl flex flex-col gap-12 py-6 w-full  bg-slate-100 top-[55px] left-[0px] ${
+				className={`fixed h-full text-5xl flex flex-col gap-12 py-6 w-full  bg-slate-100 top-[55px] left-[0px] ${
 					!burgerOpen ? 'translate-x-[300%]' : 'translate-x-[0%]'} transition-all z-50 `}>
 				{listLinks.map((el: Links, index: number) => {
 					return (

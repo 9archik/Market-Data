@@ -267,17 +267,17 @@ const Currency = () => {
 		}
 	}, [exchangeRate]);
 
-	console.log(exchangeRate);
+
 
 	const { data, isFetching, isError } = currencyDataApi.useGetCurrencyChartDataQuery({
-		from: 'USD',
-		to: 'RUB',
+		from: `USD`,
+		to: `${currencyFrom?.value.split('-')[0]}`,
 		type: 'line',
-		exchangeRate: 1,
-		interval: 'MONTHLY',
+		exchangeRate: exchangeRate !== undefined ? exchangeRate : 0,
+		interval: 'DAILY',
 	});
 
-	console.log(data);
+
 
 	return (
 		<div className="container">
@@ -326,13 +326,23 @@ const Currency = () => {
 				/>
 			</div>
 
-			<div className="flex justify-center text-4xl my-10 font-bold">
+			<div className="flex text-center justify-center text-4xl my-10 font-bold">
 				{`${Math.round(Number(valueFrom) * 100) / 100} ${currencyFrom?.value.split('-')[1]} = ${
 					Math.round(Number(valueTo) * 100) / 100
 				} ${currencyTo?.value.split('-')[1]}`}
 			</div>
-
-			{/* <LineChart /> */}
+			{!isFetching && (
+				<div className="flex text-center border-t-[2px] pt-5 border-[#c2c2c2] flex-col items-center w-full">
+					<span className="text-4xl font-bold mb-5">
+						Currency chart from USD to {currencyFrom?.value.split('-')[0]}
+					</span>
+					<LineChart
+						data={data?.data}
+						maxDomain={Number(data?.maxDomain)}
+						minDomain={Number(data?.minDomain)}
+					/>
+				</div>
+			)}
 		</div>
 	);
 };

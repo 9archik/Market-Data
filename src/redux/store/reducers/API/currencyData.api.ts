@@ -17,13 +17,19 @@ export interface ICurrencyChartParams {
 	interval: 'WEEKLY' | 'MONTHLY' | 'DAILY';
 }
 
-export interface ICurrencyChart {
+export interface IChartDataCurrency {
 	open?: number;
 	close?: number;
 	low?: number;
 	high?: number;
-	value?: number;
-	date: Date;
+	y?: number;
+	x: Date;
+}
+
+export interface ICurrencyChart {
+	data: IChartDataCurrency[];
+	maxDomain: number;
+	minDomain: number;
 }
 
 export const currencyDataApi = createApi({
@@ -37,16 +43,18 @@ export const currencyDataApi = createApi({
 			transformResponse: (response: any) =>
 				response['Realtime Currency Exchange Rate']['5. Exchange Rate'],
 		}),
-		getCurrencyChartData: builder.query<ICurrencyChart[], ICurrencyChartParams>({
+		getCurrencyChartData: builder.query<ICurrencyChart, ICurrencyChartParams>({
 			query: (currencyChartQuery: ICurrencyChartParams) => ({
 				url: `query?function=FX_${currencyChartQuery.interval}&from_symbol=${currencyChartQuery.from}&to_symbol=${currencyChartQuery.to}&apikey=2BOI0MO69QC39OUH`,
 			}),
 			transformResponse: (response: any, meta: any, args: ICurrencyChartParams) => {
-				let copy: ICurrencyChart[] = [];
-				
-				let intervalStr: string = args.interval.charAt(0).toUpperCase() + args.interval.slice(1).toLowerCase();
+				let copy: ICurrencyChart = { data: [], maxDomain: 100, minDomain: 0 };
 
-				console.log(intervalStr)
+				let intervalStr: string =
+					args.interval.charAt(0).toUpperCase() + args.interval.slice(1).toLowerCase();
+
+				const highArr: number[] = [];
+				const lowArr: number[] = [];
 
 				for (const key in response[`Time Series FX (${intervalStr})`]) {
 					let date = new Date(key);
@@ -55,23 +63,32 @@ export const currencyDataApi = createApi({
 					let low = response[`Time Series FX (${intervalStr})`][key]['3. low'];
 					let close = response[`Time Series FX (${intervalStr})`][key]['4. close'];
 
+					highArr.push(Number(high));
+					lowArr.push(Number(high) );
+
 					if (args.type === 'candlestick') {
-						let obj: ICurrencyChart = {
-							open: Number(open) * args.exchangeRate,
-							high: Number(high) * args.exchangeRate,
-							low: Number(low) * args.exchangeRate,
-							close: Number(close) * args.exchangeRate,
-							date: date,
+						let obj: IChartDataCurrency = {
+							open: Number(open),
+							high: Number(high),
+							low: Number(low),
+							close: Number(close) ,
+							x: date,
 						};
-						copy.push(obj);
+						copy.data.push();
 					} else {
-						let obj: ICurrencyChart = {
-							value: Number(close) * args.exchangeRate,
-							date: date,
+						let obj: IChartDataCurrency = {
+							y: Number(close) ,
+							x: date,
 						};
-						copy.push(obj);
+						copy.data.push(obj);
 					}
 				}
+
+				highArr.sort((a, b) => b - a);
+				lowArr.sort((a, b) => a - b);
+
+				copy.maxDomain = highArr[0];
+				copy.minDomain = lowArr[0];
 
 				return copy;
 			},

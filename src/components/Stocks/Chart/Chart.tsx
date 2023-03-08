@@ -16,7 +16,7 @@ import { stockDataApi } from '../../../redux/store/reducers/API/stockData.api';
 import { calculateXY, Mouse } from '../../../redux/store/reducers/mouseSlice';
 import { styleAxis, styleCandle } from '../../../styles/victory/stylesVictory';
 import { IQueryDataParams } from '../../../redux/store/reducers/API/IQueryDataParams';
-import Tool from '../Tool/Tool';
+
 import { VictoryCursorContainer } from 'victory';
 import { batch } from 'react-redux';
 import Checkboxs from '../Checkboxs/Checkboxs';
@@ -58,53 +58,26 @@ const Chart = () => {
 
 	const dispatch = useAppDispatch();
 
-	function resize(e: Event) {
-		if (contRef && contRef.current) {
-			let chSize: chartSize = {
-				height: contRef.current.offsetHeight,
-				width: contRef.current.offsetWidth,
-			};
-			dispatch(setChartSize(chSize));
-			contRef.current.children[0].children[0].children[0].attributes[3].nodeValue = '0 0 1440 720';
-		}
-	}
-
-	console.log(queryParams);
-
 	useEffect(() => {
 		dispatch(setStockQueryParamsName(name));
 	}, [name]);
 
-	useEffect(() => {
-		if (contRef && contRef.current) {
-			contRef.current.children[0].children[0].children[0].attributes[3].nodeValue = '0 0 1440 720';
-		}
-		window.addEventListener('resize', resize);
-		return () => window.addEventListener('resize', resize);
-	}, [chartInfo]);
-
-	console.log(data);
 
 	useEffect(() => {
 		dispatch(setChartInfo(data));
 	}, [data, queryParams, intervalState, type]);
 
-	const mouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		let x = e.clientX,
-			y = e.clientY;
-
-		console.log('y: ', y - contRef.current.offsetTop);
-
-		dispatch(calculateXY({ x: x - contRef.current.offsetLeft, y: y - contRef.current.offsetTop }));
-	};
-
 	useEffect(() => {
 		let chSize: chartSize = {
-			height: window.innerHeight,
-			width: window.innerWidth,
+			height: window.innerWidth > 1420 ? 710 : (window.innerWidth - 20) * 0.5,
+			width: window.innerWidth > 1420 ? 1420 : window.innerWidth - 20,
 		};
 		dispatch(setChartSize(chSize));
 	}, []);
+
+	console.log('width', chartSizeState.width);
+
+	console.log('height', chartSizeState.height);
 
 	if (isFetching) {
 		return (
@@ -141,30 +114,13 @@ const Chart = () => {
 	}
 
 	return (
-		<>
-			<div
-				onMouseMove={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => mouseMove(event)}
-				ref={contRef}
-				style={{
-					display: 'flex',
-					justifyContent: 'center',
-				}}>
-				<div
-					style={{
-						width: chartSizeState.width,
-						height: chartSizeState.width * 0.5,
-						maxWidth: 1440,
-						maxHeight: 720,
-						cursor: 'crosshair',
-					}}>
-					{type === 'candlestick' ? (
-						<CandleStick />
-					) : (
-						<LineChart data={chartInfo} maxDomain={maxDomain} minDomain={minDomain} />
-					)}
-				</div>
-			</div>
-		</>
+		<div className ="mt-3">
+			{type === 'candlestick' ? (
+				<CandleStick />
+			) : (
+				<LineChart data={chartInfo} maxDomain={maxDomain} minDomain={minDomain} />
+			)}
+		</div>
 	);
 };
 
