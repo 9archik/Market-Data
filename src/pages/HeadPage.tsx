@@ -23,7 +23,7 @@ const HeadPage = () => {
 	}
 	return (
 		<div className="container">  
-            <div className="text-4xl mt-5 font-bold">Latest news:</div>
+            <div className="text-3xl mt-5 pb-5 border-[#cacaca] border-b-[1px] font-bold">Latest news:</div>
 			<NewsList newsList={newsList} isFetching={newsFetching} isError={newsError} />
 		</div>
 	);

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import LineChart from '../LineChart/LineChart';
 import './style.css';
 import { currencyDataApi } from '../../redux/store/reducers/API/currencyData.api';
+import Chart from './Chart';
 import { useEffect } from 'react';
 
 export interface ICurrency {
@@ -256,29 +257,32 @@ const Currency = () => {
 		setExchangeRate(Number(exchangeFrom) / Number(exchangeTo));
 	}, [exchangeTo, exchangeFrom]);
 
-	const { data, isFetching, isError } = currencyFrom?.value.split('-')[0] !== 'USD' ? currencyDataApi.useGetCurrencyChartDataQuery(
-		{
-			from: `USD`,
-			to: `${currencyFrom?.value.split('-')[0]}`,
-			type: 'line',
-			exchangeRate: exchangeRate !== undefined ? exchangeRate : 0,
-			interval: 'DAILY',
-		},
-		{
-			skip: skip,
-		},
-	) :  currencyDataApi.useGetCurrencyChartDataQuery(
-		{
-			from: `USD`,
-			to: `EUR`,
-			type: 'line',
-			exchangeRate: exchangeRate !== undefined ? exchangeRate : 0,
-			interval: 'DAILY',
-		},
-		{
-			skip: skip,
-		},
-	)
+	const { data, isFetching, isError } =
+		currencyFrom?.value.split('-')[0] !== 'USD'
+			? currencyDataApi.useGetCurrencyChartDataQuery(
+					{
+						from: `USD`,
+						to: `${currencyFrom?.value.split('-')[0]}`,
+						type: 'line',
+						exchangeRate: exchangeRate !== undefined ? exchangeRate : 0,
+						interval: 'DAILY',
+					},
+					{
+						skip: skip,
+					},
+			  )
+			: currencyDataApi.useGetCurrencyChartDataQuery(
+					{
+						from: `USD`,
+						to: `EUR`,
+						type: 'line',
+						exchangeRate: exchangeRate !== undefined ? exchangeRate : 0,
+						interval: 'DAILY',
+					},
+					{
+						skip: skip,
+					},
+			  );
 
 	useEffect(() => {
 		setSkip(false);
@@ -321,8 +325,7 @@ const Currency = () => {
 					isSearchable
 				/>
 			</div>
-
-			<div className="input__currency-value mt-10 flex  gap-5  md:gap-20 justify-between">
+			<div className="input__currency-value mt-10 flex  gap-5 md:gap-20 justify-between">
 				<input
 					value={valueFrom}
 					placeholder={`${currencyFrom?.value.split('-')[0]}`}
@@ -336,27 +339,19 @@ const Currency = () => {
 					placeholder={`${currencyTo?.value.split('-')[0]}`}
 				/>
 			</div>
-
 			<div className="flex text-center justify-center text-2xl sm:text-4xl my-10 font-bold">
 				{`${Math.round(Number(valueFrom) * 100) / 100} ${currencyFrom?.value.split('-')[1]} = ${
 					Math.round(Number(valueTo) * 100) / 100
 				} ${currencyTo?.value.split('-')[1]}`}
 			</div>
-			{!isFetching && (
-				<div className="flex text-center border-t-[2px] pt-5 border-[#c2c2c2] flex-col items-center w-full">
-					<span className="text-2xl sm:text-4xl font-bold mb-5">
-						Currency chart from USD to{' '}
-						{currencyFrom?.value.split('-')[0] === 'USD'
-							? 'EUR'
-							: currencyFrom?.value.split('-')[0]}
-					</span>
-					<LineChart
-						data={data?.data}
-						maxDomain={Number(data?.maxDomain)}
-						minDomain={Number(data?.minDomain)}
-					/>
-				</div>
-			)}
+			{!isFetching &&
+				data &&
+				data.data.length > 0 &&
+				(!isError && data.data.length === 0 ? (
+					<Chart data={data} currencyFrom={currencyFrom} currencyTo={currencyTo} />
+				) : (
+					<div className="flex justify-center text-2xl font-bold" >Chart Error</div>
+				))}
 		</div>
 	);
 };

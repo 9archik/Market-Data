@@ -23,9 +23,9 @@ const CommoditieItem = ({name}: ICommoditiesProp) => {
 	}
 
 	return (
-		<div className="flex flex-col my-5 gap-5">
-			<span className="text-4xl font-bold">{itemData?.name}</span>
-			<span className="text-4xl font-bold">Unit: {itemData?.unit}</span>
+		<div className="flex font-bold flex-col my-5 gap-5">
+			<span className="sm:text-4xl text-2xl">{itemData?.name}</span>
+			<span className="sm:text-4xl text-2xl">Unit: {itemData?.unit}</span>
 			<LineChart
 				data={itemData?.data}
 				minDomain={itemData?.minDomain}

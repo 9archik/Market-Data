@@ -10,7 +10,7 @@ const Navigation: React.FC = () => {
 				{listLinks.map((el: Links, index: number) => {
 					return (
 						<li key={index}>
-							<Link className={styles.link} to={`/${el.text}`}>
+							<Link className={styles.link} state={{}} to={`/${el.text}`}>
 								{el.text}
 							</Link>
 						</li>
