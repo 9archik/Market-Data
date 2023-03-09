@@ -34,7 +34,9 @@ const Header = () => {
 	return (
 		<header>
 			<div className={[styles.container, 'relative', 'container'].join(' ')}>
-				<FontAwesomeIcon className={styles.logo} icon={faChartLine} />
+				<Link to="">
+					<FontAwesomeIcon className={styles.logo} icon={faChartLine} />
+				</Link>
 
 				<Input />
 
