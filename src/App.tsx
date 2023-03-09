@@ -16,14 +16,37 @@ function App() {
 	return (
 		<>
 			<Header />
-			<Routes>
-				<Route path="/stocks/:name" element={<StocksPage />} />
-				<Route path="/currency" element={<><CurrencyPage/></>} />
-				<Route index element={<><HeadPage/></>} />
-				<Route path="/commodities" element={<><CommoditiesPage/></>} />
-				<Route path="/news" element={<News />} />
-				<Route path="*" element={<NotFoundPage />} />
-			</Routes>
+			<div className="container">
+				<Routes>
+					<Route path="/stocks/:name" element={<StocksPage />} />
+					<Route
+						path="/currency"
+						element={
+							<>
+								<CurrencyPage />
+							</>
+						}
+					/>
+					<Route
+						index
+						element={
+							<>
+								<HeadPage />
+							</>
+						}
+					/>
+					<Route
+						path="/commodities"
+						element={
+							<>
+								<CommoditiesPage />
+							</>
+						}
+					/>
+					<Route path="/news" element={<News />} />
+					<Route path="*" element={<NotFoundPage />} />
+				</Routes>
+			</div>
 		</>
 	);
 }

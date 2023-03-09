@@ -18,8 +18,13 @@ const HeadPage = () => {
 
     console.log(newsData);
 
+	if(newsFetching)
+	{
+	    return <div className="text-3xl mt-5 pb-5">Loading</div>;
+	}
+
 	if (!newsData) {
-		return <>Error</>;
+		return <div className="text-3xl mt-5 pb-5">Error</div>;
 	}
 	return (
 		<div className="container">  
