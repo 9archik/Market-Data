@@ -11,11 +11,8 @@ const NewsStocks = () => {
 	const [newsList, setNewsList] = useState<INews[] | null>(null);
 
 	useEffect(() => {
-		if (data && data.feed?.length !== 0) {
-			let copy: INewsList = {
-				feed: data.feed,
-			};
-			if (copy && copy.feed) setNewsList(copy.feed.slice(0, 5));
+		if (data && data.length !== 0) {
+		    setNewsList(data.slice(0, 5));
 		}
 	}, [data, isFetching, isError]);
 

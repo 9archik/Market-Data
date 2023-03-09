@@ -9,6 +9,8 @@ import StocksPage from './pages/StocksPage';
 import News from './components/News';
 import NotFoundPage from './pages/NotFoundPage';
 import CurrencyPage from './pages/CurrencyPage';
+import CommoditiesPage from './pages/CommoditiesPage';
+import HeadPage from './pages/HeadPage';
 
 function App() {
 	return (
@@ -17,8 +19,8 @@ function App() {
 			<Routes>
 				<Route path="/stocks/:name" element={<StocksPage />} />
 				<Route path="/currency" element={<><CurrencyPage/></>} />
-				<Route index element={<></>} />
-				<Route path="/commodities" element={<></>} />
+				<Route index element={<><HeadPage/></>} />
+				<Route path="/commodities" element={<><CommoditiesPage/></>} />
 				<Route path="/news" element={<News />} />
 				<Route path="*" element={<NotFoundPage />} />
 			</Routes>

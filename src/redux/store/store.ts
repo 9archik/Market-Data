@@ -14,6 +14,7 @@ import stockQueryParamsReducer from './reducers/stockQueryParamsSlice';
 import { detailedStockDataApi } from './reducers/API/detailedStockData.api';
 import { newsMarketApi } from './reducers/API/newsMarket.api';
 import { currencyDataApi } from './reducers/API/currencyData.api';
+import { commoditiesApi } from './reducers/API/commoditiesData.api';
 const rootReducer = combineReducers({
 	mouseReducer,
 	[stockToolsApi.reducerPath]: stockToolsApi.reducer,
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
 	[detailedStockDataApi.reducerPath]:detailedStockDataApi.reducer,
 	[newsMarketApi.reducerPath]: newsMarketApi.reducer,
 	[currencyDataApi.reducerPath]: currencyDataApi.reducer,
+	[commoditiesApi.reducerPath]: commoditiesApi.reducer,
 	inputDebounceValueReducer,
 	searchQueryValueReducer,
 	toolListReducer,
@@ -41,6 +43,7 @@ export const setupStore = () => {
 				detailedStockDataApi.middleware,
 				newsMarketApi.middleware,
                 currencyDataApi.middleware,
+				commoditiesApi.middleware,
 			]),
 	});
 };

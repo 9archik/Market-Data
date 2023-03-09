@@ -192,7 +192,7 @@ const options = currencyArray.map((el) => {
 	return { value: value, label: label };
 });
 const Currency = () => {
-	const [skip, setSkip] = useState<boolean>(false);
+	const [skip, setSkip] = useState<boolean>(true);
 
 	const [currencyFrom, setCurrencyFrom] = useState<IOption | SingleValue<IOption>>(options[0]);
 
@@ -256,28 +256,39 @@ const Currency = () => {
 		setExchangeRate(Number(exchangeFrom) / Number(exchangeTo));
 	}, [exchangeTo, exchangeFrom]);
 
-	// useEffect(() => {
-	// 	setValueTo(Number(inputValueTo));
-	// 	setValueFrom(Number(inputValueFrom));
-	// }, [inputValueFrom, inputValueTo]);
+	const { data, isFetching, isError } = currencyFrom?.value.split('-')[0] !== 'USD' ? currencyDataApi.useGetCurrencyChartDataQuery(
+		{
+			from: `USD`,
+			to: `${currencyFrom?.value.split('-')[0]}`,
+			type: 'line',
+			exchangeRate: exchangeRate !== undefined ? exchangeRate : 0,
+			interval: 'DAILY',
+		},
+		{
+			skip: skip,
+		},
+	) :  currencyDataApi.useGetCurrencyChartDataQuery(
+		{
+			from: `USD`,
+			to: `EUR`,
+			type: 'line',
+			exchangeRate: exchangeRate !== undefined ? exchangeRate : 0,
+			interval: 'DAILY',
+		},
+		{
+			skip: skip,
+		},
+	)
+
+	useEffect(() => {
+		setSkip(false);
+	});
 
 	useEffect(() => {
 		if (exchangeRate) {
 			setValueTo(`${Number(valueFrom) * exchangeRate}`);
 		}
 	}, [exchangeRate]);
-
-
-
-	const { data, isFetching, isError } = currencyDataApi.useGetCurrencyChartDataQuery({
-		from: `USD`,
-		to: `${currencyFrom?.value.split('-')[0]}`,
-		type: 'line',
-		exchangeRate: exchangeRate !== undefined ? exchangeRate : 0,
-		interval: 'DAILY',
-	});
-
-
 
 	return (
 		<div className="container">
@@ -326,15 +337,18 @@ const Currency = () => {
 				/>
 			</div>
 
-			<div className="flex text-center justify-center text-4xl my-10 font-bold">
+			<div className="flex text-center justify-center text-2xl sm:text-4xl my-10 font-bold">
 				{`${Math.round(Number(valueFrom) * 100) / 100} ${currencyFrom?.value.split('-')[1]} = ${
 					Math.round(Number(valueTo) * 100) / 100
 				} ${currencyTo?.value.split('-')[1]}`}
 			</div>
 			{!isFetching && (
 				<div className="flex text-center border-t-[2px] pt-5 border-[#c2c2c2] flex-col items-center w-full">
-					<span className="text-4xl font-bold mb-5">
-						Currency chart from USD to {currencyFrom?.value.split('-')[0]}
+					<span className="text-2xl sm:text-4xl font-bold mb-5">
+						Currency chart from USD to{' '}
+						{currencyFrom?.value.split('-')[0] === 'USD'
+							? 'EUR'
+							: currencyFrom?.value.split('-')[0]}
 					</span>
 					<LineChart
 						data={data?.data}

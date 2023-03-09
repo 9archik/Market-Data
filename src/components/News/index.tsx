@@ -69,7 +69,7 @@ const FilterNewsForm: IFilterNewsForm = {
 const News = () => {
 	const [searchParams, setSearchParams] = useSearchParams();
 
-	const [memoData, setMemoData] = useState<INewsList | null>(null);
+	// const [memoData, setMemoData] = useState<INewsList | null>(null);
 
 	const tickersQuery = searchParams.get('tickers') || '';
 
@@ -78,6 +78,8 @@ const News = () => {
 	const sortQuery = searchParams.get('sort') || '';
 
 	const ref = useRef<any>();
+
+	const listRef = useRef<any>();
 
 	const [openFilters, setOpenFilters] = useState<Boolean>(false);
 
@@ -95,6 +97,8 @@ const News = () => {
 
 	const [inputValue, setInputValue] = useState<string>('');
 
+	console.log(tickersQuery);
+
 	const { data, isFetching, isError } = newsMarketApi.useGetNewsQuery(
 		{
 			tickers: tickersQuery,
@@ -104,14 +108,11 @@ const News = () => {
 		{ skip: skip },
 	);
 
-	useEffect(() => {
-		if (data) {
-			setMemoData(data);
-		}
-	}, [data, isFetching, isError]);
+	console.log(data)
 
 	useEffect(() => {
-		if (ref && ref.current) setHeightState(ref.current.scrollHeight);
+		if (ref && ref.current && listRef && listRef.current)
+			setHeightState(listRef.current.scrollHeight);
 	}, [openFilters]);
 
 	useEffect(() => {
@@ -119,13 +120,11 @@ const News = () => {
 
 		const tickersArray: string[] = tickersQuery.split(/\,|:/);
 
-
-
 		for (let i = 0; i < tickers.length; i++) {
 			for (let j = 0; j < tickersArray.length; j++) {
 				if (tickers[i].name === tickersArray[j]) {
 					tickers[i].checked = true;
-					delete tickersArray[j];
+					
 				}
 			}
 		}
@@ -138,7 +137,7 @@ const News = () => {
 			for (let j = 0; j < topicsArray.length; j++) {
 				if (topics[i].value === topicsArray[j]) {
 					topics[i].checked = true;
-					delete topicsArray[j];
+				
 				}
 			}
 		}
@@ -153,12 +152,14 @@ const News = () => {
 		}
 
 		window.addEventListener('resize', () => {
-			if (ref && ref.current) setHeightState(ref.current.scrollHeight);
+			if (ref && ref.current && listRef && listRef.current)
+				setHeightState(listRef.current.scrollHeight);
 		});
 
 		return () =>
 			window.addEventListener('resize', () => {
-				if (ref && ref.current) setHeightState(ref.current.scrollHeight);
+				if (ref && ref.current && listRef && listRef.current)
+					setHeightState(listRef.current.scrollHeight);
 			});
 	}, []);
 
@@ -255,7 +256,7 @@ const News = () => {
 					style={{
 						height: openFilters ? heightState + 20 : 0,
 					}}>
-					<ul className={`${styles.accordion} ${openFilters && styles.open}`}>
+					<ul ref={listRef} className={`${styles.accordion} ${openFilters && styles.open}`}>
 						<li className="flex flex-col order-1 gap-5" key="tickers">
 							<h3 className="text-4xl font-bold mb-5">Tickers</h3>
 							{tickersFilter.map((el, index) => {
@@ -348,7 +349,7 @@ const News = () => {
 						<button className="text-3xl py-4 px-12 border-2 border-[#000]">Search</button>
 					</div> */}
 				</form>
-				<NewsList newsList={memoData?.feed} isError={isError} isFetching={isFetching} />
+				<NewsList newsList={data} isError={isError} isFetching={isFetching} />
 			</div>
 		</>
 	);

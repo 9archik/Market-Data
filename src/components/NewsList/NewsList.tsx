@@ -6,12 +6,13 @@ import ReactPaginate from 'react-paginate';
 import styles from './style.module.css';
 
 export interface INewsListProp {
-	newsList: INews[] | null | undefined;
+	newsList?: INews[] | null;
 	isFetching: any;
 	isError: any;
 }
 
 const NewsList = ({ newsList, isFetching, isError }: INewsListProp) => {
+
 	const [pageCount, setPageCount] = useState<number>(
 		newsList ? Math.ceil(newsList?.length / 10) : 0,
 	);
@@ -25,9 +26,11 @@ const NewsList = ({ newsList, isFetching, isError }: INewsListProp) => {
 	const [listPaginate, setListPaginate] = useState<INews[] | null | undefined>(null);
 
 	useEffect(() => {
-		setListPaginate(newsList?.slice(currentPage*10, currentPage*10 + 10));
-		setPageCount(newsList ? Math.ceil(newsList?.length / 10) : 0);
-		window.scrollTo(0, 0);
+		if (newsList) {
+			setListPaginate(newsList.slice(currentPage * 10, currentPage * 10 + 10));
+			setPageCount(newsList ? Math.ceil(newsList?.length / 10) : 0);
+			window.scrollTo(0, 0);
+		}
 	}, [currentPage, newsList]);
 
 	useEffect(() => {
@@ -37,14 +40,14 @@ const NewsList = ({ newsList, isFetching, isError }: INewsListProp) => {
 	if (pageCount === 0) {
 		return <></>;
 	}
-	
+
 	return (
 		<>
-			<ul className="flex flex-col gap-10 mt-10">
+			<ul className="flex flex-col gap-10 mt-5">
 				{listPaginate &&
 					listPaginate.map((el) => {
 						return (
-							<li className="flex items-center gap-14 pb-10 border-b-2 border-[#9b9b9b] ">
+							<li className="flex flex-col sm:flex-row items-center gap-14 pb-10 border-b-2 border-[#9b9b9b] ">
 								<div>
 									<img
 										className="max-w-none object-scale-down h-[200px]"
@@ -55,7 +58,7 @@ const NewsList = ({ newsList, isFetching, isError }: INewsListProp) => {
 									/>
 								</div>
 
-								<div className="text-2xl flex flex-col gap-10 justify-center">
+								<div className="text-2xl text-center flex flex-col gap-10 justify-center">
 									<a
 										target="_blank"
 										href={el.url}
@@ -69,20 +72,22 @@ const NewsList = ({ newsList, isFetching, isError }: INewsListProp) => {
 					})}
 			</ul>
 
-			<ReactPaginate
-				previousLabel="<"
-				pageRangeDisplayed={2}
-				breakLabel="..."
-				nextLabel=">"
-				pageCount={pageCount}
-				containerClassName={'mt-10 mb-10 flex gap-12 flex-wrap justify-center'}
-				onPageChange={handlePageClick}
-				pageLinkClassName={styles.disabledPage}
-				activeLinkClassName={styles.activePage}
-				previousClassName={styles.previousBtn}
-				nextLinkClassName={styles.nextBtn}
-				forcePage={currentPage}
-			/>
+			{newsList && newsList?.length > 10 && (
+				<ReactPaginate
+					previousLabel="<"
+					pageRangeDisplayed={2}
+					breakLabel="..."
+					nextLabel=">"
+					pageCount={pageCount}
+					containerClassName={'mt-10 mb-10 flex gap-12 flex-wrap justify-center'}
+					onPageChange={handlePageClick}
+					pageLinkClassName={styles.disabledPage}
+					activeLinkClassName={styles.activePage}
+					previousClassName={styles.previousBtn}
+					nextLinkClassName={styles.nextBtn}
+					forcePage={currentPage}
+				/>
+			)}
 		</>
 	);
 };
